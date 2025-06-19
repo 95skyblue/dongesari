@@ -37,7 +37,7 @@
         <th>번호</th>
         <th>아이디</th>
         <th>이름</th>
-        <th>닉네임</th>
+        <th>닉네임</th> asd
         <th>이메일</th>
         <th>주소</th>
         <th>번호</th>
