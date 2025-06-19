@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,15 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<!-- 윤현준 바보 -->
-<!-- 아 어렵다 -->
-<!-- 아 어렵다 -->
-<!-- 아 어렵다 -->
-<!-- 아 어렵다 -->
-<!-- 아 어렵다 -->
-<!-- 아 어렵다 -->
 
-	
 <div class="container mt-5">
   <h2 class="mb-4">회원 리스트 조회</h2>
 
@@ -37,14 +28,14 @@
     </div>
   </form>
 
-  <!-- 회원 목록 테이블 --> 
+  <!-- 회원 목록 테이블 -->
   <table class="table table-bordered table-hover">
     <thead class="table-light">
       <tr>
         <th>번호</th>
         <th>아이디</th>
         <th>이름</th>
-        <th>닉네임</th><div></div>
+        <th>닉네임</th>
         <th>이메일</th>
         <th>주소</th>
         <th>번호</th>
@@ -52,51 +43,67 @@
       </tr>
     </thead>
     <tbody id="memberList">
-      <!-- 여기에 JS로 회원 목록이 들어갈 예정 -->
-      <!-- 예시 -->
-      <!--
-      <tr>
-        <td>1</td>
-        <td>mattaeng</td>
-        <td>맛탱이</td>
-        <td>mat@example.com</td>
-        <td>2024-06-01</td>
-        <td>일반</td>
-        <td>활동중</td>
-        <td><button class="btn btn-sm btn-danger">삭제</button></td>
-      </tr>
-      -->
+      <!-- 여기에 JS로 회원 목록이 들어감 -->
     </tbody>
   </table>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-  // JS로 검색 기능이나 AJAX 연결 추가 예정
-  // ex) fetch('/admin/memberList.do')
+  const mypath = "<%=request.getContextPath()%>";
+
+  // 페이지 로딩 시 전체 회원 조회
+  $(document).ready(function () {
+    loadMemberList();
+  });
+
+  // 검색 이벤트 처리
+  $('#searchForm').on('submit', function (e) {
+    e.preventDefault();
+    loadMemberList();
+  });
+
+  // AJAX를 통한 회원 목록 불러오기
+  function loadMemberList() {
+    const keyword = $('input[name="keyword"]').val();
+    const memberType = $('select[name="memberType"]').val();
+
+    $.ajax({
+      url: mypath + "/MemberListServlet.do", // 컨트롤러 서블릿 URL
+      method: 'GET',
+      data: {
+        keyword: keyword,
+        memberType: memberType
+      },
+      dataType: 'json',
+      success: function (data) {
+    	  console.log(data);
+        let html = '';
+        if (data.length === 0) {
+          html = '<tr><td colspan="8" class="text-center">검색 결과가 없습니다.</td></tr>';
+        } else {
+          $.each(data, function (i, member) {
+            html += `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${member.loginId}</td>
+                <td>${member.name}</td>
+                <td>${member.nickname}</td>
+                <td>${member.email}</td>
+                <td>${member.addrId}</td>
+                <td>${member.phoneNum}</td>
+                <td>${member.joinAt}</td>
+              </tr>
+            `;
+          });
+        }
+        $('#memberList').html(html);
+      },
+      error: function () {
+        alert('회원 조회 중 오류가 발생했습니다.');
+      }
+    });
+  }
 </script>
-	
-	
-	
-	<!-- 
-	<div>
-		<table>
-			<thead>
-				<tr>
-					<th>회원번호</th>
-					<th>아이디</th>
-					<th>이름</th>
-					<th>닉네임</th>
-					<th>이메일</th>
-					<th>주소</th>
-					<th>번호</th>
-					<th>가입날짜</th>
-				</tr>
-			</thead>
-		</table>
-	</div>
-	 -->
-	
-	
-	
 </body>
 </html>

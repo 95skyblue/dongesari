@@ -7,7 +7,6 @@
 	<!-- 가입날짜순으로 조회 -->
 	<select id="getAllMember" resultType="memberVO">
 	    SELECT * FROM member
-	    ORDER BY "join_at" DESC
 	</select>
 	
 	

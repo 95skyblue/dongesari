@@ -22,7 +22,7 @@ public class MemberServiceImpl implements IMemberService {
 		private IMemberDao  dao;
 		
 		//생성자 
-		private MemberServiceImpl() {
+		public MemberServiceImpl() {
 			dao = MemberDaoImpl.getDao();
 		}
 
@@ -55,5 +55,6 @@ public class MemberServiceImpl implements IMemberService {
 			// TODO Auto-generated method stub
 			return dao.insertMember(vo);
 		}
+
 
 }

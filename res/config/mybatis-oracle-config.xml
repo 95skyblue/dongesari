@@ -6,14 +6,18 @@
 <configuration>
 	<properties resource="config/oracle.properties"/>
 	
+	
+	
 	<settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
 	
-	<typeAliases>
-        
-    </typeAliases>
+	
+	  <typeAliases>
+	    <typeAlias alias="memberVO" type="com.dongnesari.comm.admin.vo.MemberVO"/>
+	  </typeAliases>
+  
 	
 	<environments default="oracle">
 		<environment id="oracle">

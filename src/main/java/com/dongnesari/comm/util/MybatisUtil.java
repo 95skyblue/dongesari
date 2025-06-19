@@ -18,7 +18,7 @@ private static SqlSessionFactory sessionFactory;
 			Charset charset = Charset.forName("UTF-8");
 			Resources.setCharset(charset);
 			
-			Reader rd = Resources.getResourceAsReader("kr/or/ddit/mybatis/config/mybatis-config.xml");
+			Reader rd = Resources.getResourceAsReader("config/mybatis-oracle-config.xml");
 		
 			//Reader객체를 이용하여 SqlSessionFactory 객체 생성하기
 			sessionFactory = new SqlSessionFactoryBuilder().build(rd);
@@ -26,7 +26,9 @@ private static SqlSessionFactory sessionFactory;
 			rd.close();
 			
 		}catch(Exception ex) {
+			System.out.println("MyBatis 설정 파일 못찾음!!!");
 			ex.printStackTrace();
+			throw new RuntimeException("MyBatis 초기화 실패", ex);
 		}
 	}
 	
