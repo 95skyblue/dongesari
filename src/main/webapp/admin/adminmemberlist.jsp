@@ -30,7 +30,7 @@
     </div>
   </form>
 
-  <!-- 회원 목록 테이블 -->
+  <!-- 회원 목록 테이블 --> 
   <table class="table table-bordered table-hover">
     <thead class="table-light">
       <tr>
