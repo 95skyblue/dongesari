@@ -4,6 +4,8 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.dongnesari.comm.board.vo.PostVO;
 
+import config.MybatisUtil;
+
 public class PostDAOImpl implements IPostDAO {
 	
 	private static IPostDAO dao;
@@ -20,9 +22,21 @@ public class PostDAOImpl implements IPostDAO {
 	
 	@Override
 	public int insertPost(PostVO vo) {
-		//SqlSession session = MybatisUtil.getInstance();
+		SqlSession session = MybatisUtil.getInstance();
+		int res = 0;
 		
-		return 0;
+		try {
+			
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}finally {
+			if(session != null) {
+				session.commit();
+				session.close();
+			}
+		}
+		
+		return res;
 	}
 
 }
