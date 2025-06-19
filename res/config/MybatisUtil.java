@@ -27,7 +27,7 @@ public class MybatisUtil {
 			rd.close();
 			
 		}catch(Exception ex) {
-			ex.printStackTrace();
+			ex.printStackTrace(); 
 		}
 	}
 	
