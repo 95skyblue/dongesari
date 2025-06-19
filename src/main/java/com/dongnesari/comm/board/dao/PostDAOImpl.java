@@ -20,6 +20,7 @@ public class PostDAOImpl implements IPostDAO {
 	
 	@Override
 	public int insertPost(PostVO vo) {
+		//SqlSession session = MybatisUtil.getInstance();
 		
 		return 0;
 	}

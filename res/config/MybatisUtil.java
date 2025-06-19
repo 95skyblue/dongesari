@@ -31,6 +31,11 @@ public class MybatisUtil {
 		}
 	}
 	
+	/**
+	 * SqlSession 객체를 제공하기 위한 팩토리 메서드
+	 * @param autoCommit 오토커밋 여부
+	 * @return SqlSession 객체
+	 */ 
 	public static SqlSession getInstance() {
 		
 		return sessionFactory.openSession();
