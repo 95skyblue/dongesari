@@ -9,5 +9,6 @@ public static void main(String[] args) {
 	System.out.println("나는바보바보바보");
 	System.out.println("아렁머라ㅣㅁ어ㅏ러마");
 	System.out.println("아러ㅏㅁ어");
+	System.out.println("ㅇ라ㅓㅁ아러ㅏㅁ어ㅏ러마");
 }
 }
