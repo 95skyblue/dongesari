@@ -12,8 +12,7 @@
     </settings>
 	
 	<typeAliases>
-        <typeAlias alias="LoginDTO" type="dnsr.test.dto.LoginDTO"/>
-        <typeAlias alias="SessionDTO" type="dnsr.test.dto.SessionDTO"/>
+        
     </typeAliases>
 	
 	<environments default="oracle">

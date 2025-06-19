@@ -38,6 +38,34 @@ public class TestDAO {
 		return instance;
 	}
 	
+	/**
+	 * @author 송태호
+	 * @param loginId 클라이언트가 입력한 로그인용 아이디
+	 * @return member 테이블에 해당 아이디가 있으면 true
+	 * @exception DB 연결이 안되어있으면 에러 던질듯?
+	 */
+	public boolean checkIdFromMember(String loginId) {
+		ss = ssf.openSession(true);
+		try {
+			int result = ss.selectOne("test.checkIdFromMember", loginId);
+			return result == 1;
+		} finally { ss.close(); }
+	}
+	
+	/**
+	 * @author 송태호
+	 * @param loginId 클라이언트가 입력한 로그인용 아이디
+	 * @return mem_quitted 테이블에 해당 아이디가 있으면 true
+	 * @exception DB 연결이 안되어있으면 에러 던질듯?
+	 */
+	public boolean checkIdFromMemQuit(String loginId) {
+		ss = ssf.openSession(true);
+		try {
+			int result = ss.selectOne("test.checkIdFromMemQuit", loginId);
+			return result == 1;
+		} finally { ss.close(); }
+	}
+	
 	// 로그인 시도 메서드. 성공하면 LoginSessionDTO를 반환
 	// 로그인 실패하면 loginFail, 내부 오류면 loginError 코드 반환
 	public SessionDTO login(LoginDTO dto) {
