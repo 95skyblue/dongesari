@@ -11,5 +11,6 @@ public static void main(String[] args) {
 	System.out.println("아러ㅏㅁ어");
 	System.out.println("ㅇ라ㅓㅁ아러ㅏㅁ어ㅏ러마");
 	System.out.println("fdkjfkdjkfd");
+	System.out.println("랑러ㅏ어랑");
 }
 }
