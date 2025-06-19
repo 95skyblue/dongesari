@@ -29,7 +29,7 @@
 				<input type="text" class="form-control" id="user-id" name="memId" aria-describedby="id-msg">
 			</div>
 			<div class="offset-2">
-				<div id="id-msg" class="form-text">영문/숫자 혼합하여 6~20글자</div>
+				<div id="id-msg" class="form-text">영문/숫자 혼합 6~20글자</div>
 			</div>
 		</div>
 
