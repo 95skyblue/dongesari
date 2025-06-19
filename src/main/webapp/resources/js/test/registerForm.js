@@ -9,12 +9,15 @@ $(function() {
 	let isPwChecked = false;
 	let isNameOK = false;
 	let isNickOK = false;
+	let isEmailOK = false;
 	
 	const statusDebug = () => {
 		console.log("아이디 통과여부", isIdOK);
 		console.log("비번 통과여부", isPwOK);
 		console.log("비번확인 통과여부", isPwChecked);		
+		console.log("이름 통과여부", isNameOK);
 		console.log("닉네임 통과여부", isNickOK);
+		console.log("이메일 유효성검사여부", isEmailOK)
 	}
 	
 	// 아이디 사용 가능한지 요청 날려서 코드 반환하는 함수
@@ -172,19 +175,26 @@ $(function() {
 			return;
 		}
 		
-		if(userName !== $('#name-msg').val()) {
-			$('#pw2-msg').css("color", "red");
-			$('#pw2-msg').html('비밀번호가 일치하지 않습니다.');
-			$('#user-pw2').removeClass('is-valid');
-			$('#user-pw2').addClass('is-invalid');
-			
+		const errors = [];
+
+		if (userName.length < 2) errors.push("이름은 2자 이상이어야 합니다.");
+		if (userName.length > 17) errors.push("이름은 17자 이하여야 합니다.");
+		if (!/[가-힣]/.test(userName)) errors.push("이름은 한글로만 입력해 주세요.");
+		if (/\s/.test(userName)) errors.push("이름에는 공백이 포함될 수 없습니다.");
+		
+		if (errors.length === 0) { // 유효성검사 통과 시
+			$('#user-name').removeClass('is-invalid');
+			$('#user-name').addClass('is-valid');
+			$('#name-msg').css("color", "green");
+			$('#name-msg').text("멋진 이름이네요!");
+			isNameOK = true;
 		} else {
-			$('#pw2-msg').css('color', 'green');
-			$('#pw2-msg').html('입력하신 비밀번호와 일치합니다.');
-			$('#user-pw2').removeClass('is-invalid');
-			$('#user-pw2').addClass('is-valid');
-			isPwChecked = true;
-		}
+			const errorMsg = errors.map(msg => msg + '<br>').join('');
+			$('#user-name').removeClass('is-valid');
+			$('#user-name').addClass('is-invalid');
+			$('#name-msg').css("color", "red");
+			$('#name-msg').html(errorMsg);	
+		}		
 	}
 	
 	const validateNickname = async (nickname) => { // 닉네임 패턴 검사 후 중복 검사
@@ -229,6 +239,7 @@ $(function() {
 		$('#nick-msg').html(errorMsg);
 	};
 	
+	// 다음 api 복붙해옴.
 	function getAddressByPostcode() {
         new daum.Postcode({
             oncomplete: function(data) {
@@ -267,6 +278,27 @@ $(function() {
         }).open();
     }
 	
+	const validateEmail = (email) => {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+        $('#email-msg').text("이메일 형식이 아닌 것 같아요.");
+        $('#email-msg').css("color", "red");
+        $('#email-identify').prop("disabled", true); // 버튼 비활성화
+        isEmailOK = false;
+    } else {
+		$('#email-msg').text('');
+        $('#email-identify').prop("disabled", false); // 버튼 활성화
+        isEmailOK = true;
+    }
+};
+	
+	const sendVerifyMail = (email) => {
+		if(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+			$('#email-msg').text("이메일 형식이 아닌 것 같아요.");
+			$('#email-msg').css("color", "red");
+		}
+
+	}
+	
 	let timer; // 타이머 ID를 저장할 변수 선언 (디바운싱용). 
 	// 이걸 전역으로 선언해야 입력이 들어올 때마다 이전 타이머를 취소(clearTimeout)할 수 있음.
 	$("#user-id").on("input", function() { // 유저아이디 입력창에 입력이 들어오면
@@ -297,7 +329,14 @@ $(function() {
 		}, 750);
 	});
 	
-	$("#nickname").on("input", function() { // 유저아이디 입력창에 입력이 들어오면
+	$("#user-name").on("input", function() {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			validateName($('#user-name').val());
+		}, 750);	
+	});
+	
+	$("#nickname").on("input", function() {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			validateNickname($('#nickname').val());
@@ -306,6 +345,13 @@ $(function() {
 	
 	$('#zipcode-search').on('click', getAddressByPostcode);
 	
+	$("#email").on("input", function() {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			validateEmail($('#email').val().trim());
+		}, 750);	
+	});
+
 	$('#debug').on('click', statusDebug);
 	
 });

@@ -76,7 +76,7 @@
 				<input type="text" class="form-control" id="nickname" name="nickname" aria-describedby="nick-msg">
 			</div>
 			<div class="offset-2">
-				<div id="nick-msg" class="form-text">이미 사용중인 닉네임</div>
+				<div id="nick-msg" class="form-text">사용하실 닉네임을 입력하세요.</div>
 			</div>
 		</div>
 
@@ -115,6 +115,9 @@
 			</div>
 			<div class="col-3">
 				<button type="button" class="btn btn-primary w-100" id="email-identify">이메일인증</button>
+			</div>
+			<div class="offset-2">
+				<div id="email-msg" class="form-text"></div>
 			</div>
 		</div>
 		
