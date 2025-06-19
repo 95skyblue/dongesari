@@ -9,12 +9,15 @@
 <title>회원가입</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-serializejson@3.2.1/jquery.serializejson.min.js"></script>
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="<%=request.getContextPath()%>/resources/js/test/registerForm.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
 
 </head>
 <body data-context="<%=request.getContextPath()%>">
@@ -60,6 +63,9 @@
 			<label for="user-name" class="col-form-label col-2">이름</label>
 			<div class="col-5">
 				<input type="text" class="form-control" id="user-name" name="name">
+			</div>
+			<div class="offset-2">
+				<div id="name-msg" class="form-text">실명을 입력해 주세요.</div>
 			</div>
 		</div>
 
@@ -111,6 +117,8 @@
 				<button type="button" class="btn btn-primary w-100" id="email-identify">이메일인증</button>
 			</div>
 		</div>
+		
+		<button type="button" class="btn btn-secondary" id="debug">통과상태 디버깅</button>
 
 	</form>
 </section>

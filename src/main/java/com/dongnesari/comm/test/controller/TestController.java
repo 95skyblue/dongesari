@@ -2,6 +2,7 @@ package com.dongnesari.comm.test.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,7 +32,12 @@ public class TestController extends HttpServlet {
 	    String action = request.getPathInfo();
 
 	    // 지원하는 요청 경로 목록
-	    Set<String> validPaths = Set.of("/login", "/login.do", "/register", "/checkdupl.do");
+	    Set<String> validPaths = new HashSet<>();
+	    validPaths.add("/login");
+	    validPaths.add("/login.do");
+	    validPaths.add("/register");
+	    validPaths.add("/checkdupl.do");
+	    validPaths.add("/checkduplnick.do");
 
 	    if (!validPaths.contains(action)) { // 이놈이 지원하는 경로가 아니면
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404 오류 보내기
@@ -59,6 +65,9 @@ public class TestController extends HttpServlet {
 	    		break;
 	    	case "/checkdupl.do" :
 	    		handleCheckDuplDo(request, response);
+	    		break;
+	    	case "/checkduplnick.do" :
+	    		handleCheckDuplNickDo(request, response);
 	    		break;
 	    	default : 
 	    		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -121,7 +130,7 @@ public class TestController extends HttpServlet {
 	
 	private void handleCheckDuplDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 요청 바디(JSON) 읽기
-	    String loginId= ServletUtil.readRequestBody(request);
+	    String loginId = ServletUtil.readRequestBody(request);
 	    
 	    System.out.println("어 아이디 중복확인중이여");
 	    System.out.println(loginId);
@@ -137,5 +146,25 @@ public class TestController extends HttpServlet {
         Gson gson = new Gson();
         response.setContentType("application/json");
         response.getWriter().write(gson.toJson(result));
+	}
+	
+	private void handleCheckDuplNickDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 요청 바디(JSON) 읽기
+		String nickname = ServletUtil.readRequestBody(request);
+		
+		System.out.println("어 닉네임 중복확인중이여");
+		System.out.println(nickname);
+		
+		TestService service = TestService.getInstance();
+		
+		boolean b = service.canIUseThisNick(nickname);
+		
+		// 중복체크 결과 전송
+		Map<String, String> result = new HashMap<>();
+		result.put("status", b ? "ok" : "no");
+		
+		Gson gson = new Gson();
+		response.setContentType("application/json");
+		response.getWriter().write(gson.toJson(result));
 	}
 }

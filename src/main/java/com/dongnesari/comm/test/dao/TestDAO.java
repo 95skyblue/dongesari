@@ -66,6 +66,17 @@ public class TestDAO {
 		} finally { ss.close(); }
 	}
 	
+	public boolean checkNickname(String nickname) {
+		ss = ssf.openSession(true);
+		try {
+			int result = ss.selectOne("test.checkNickname", nickname);
+			return result == 1;
+		} finally { ss.close(); }
+	}
+	
+	
+	
+	
 	// 로그인 시도 메서드. 성공하면 LoginSessionDTO를 반환
 	// 로그인 실패하면 loginFail, 내부 오류면 loginError 코드 반환
 	public SessionDTO login(LoginDTO dto) {

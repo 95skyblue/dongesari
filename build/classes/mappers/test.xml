@@ -15,7 +15,11 @@
 		WHERE "login_id" = #{loginId}	
 	</select>
 	
-	
+	<select id="checkNickname" parameterType="String" resultType="int">
+		SELECT count(*)
+		FROM member
+		WHERE "nickname" = #{nickname}	
+	</select>
 <!-- 	<insert id = "register" parameterType="RegisterDTO"> -->
 <!-- 		INSERT INTO MEMBER (mem_id, login_id, name, nickname) -->
 <!-- 		VALUES -->

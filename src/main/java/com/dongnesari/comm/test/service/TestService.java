@@ -21,4 +21,7 @@ public class TestService {
 		return !(a||b);
 	}
 	
+	public boolean canIUseThisNick(String nickname) {
+		return !dao.checkNickname(nickname);
+	}
 }

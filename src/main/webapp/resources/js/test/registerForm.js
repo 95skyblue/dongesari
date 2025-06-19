@@ -7,32 +7,63 @@ $(function() {
 	let isIdOK = false;
 	let isPwOK = false;
 	let isPwChecked = false;
+	let isNameOK = false;
+	let isNickOK = false;
+	
+	const statusDebug = () => {
+		console.log("아이디 통과여부", isIdOK);
+		console.log("비번 통과여부", isPwOK);
+		console.log("비번확인 통과여부", isPwChecked);		
+		console.log("닉네임 통과여부", isNickOK);
+	}
 	
 	// 아이디 사용 가능한지 요청 날려서 코드 반환하는 함수
 	const checkDupl = (loginId) => {
-			return new Promise((resolve, reject) => {
-				$.ajax({
-					url: contextPath + '/test/checkdupl.do',
-					method: 'POST',
-					contentType: 'text/plain',
-					data: loginId,
-					dataType: 'json',
-					success: function(response) {
-						if (response.status === 'ok') resolve(1);
-						else if (response.status === 'no') resolve(2);
-						else resolve(3);
-					},
-					error: function(error) {
-						console.error('AJAX 에러(아마도 응답없음)', error);
-						reject(error);
-					}
-				});
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				url: contextPath + '/test/checkdupl.do',
+				method: 'POST',
+				contentType: 'text/plain',
+				data: loginId,
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'ok') resolve(1);
+					else if (response.status === 'no') resolve(2);
+					else resolve(3);
+				},
+				error: function(error) {
+					console.error('AJAX 에러(아마도 응답없음)', error);
+					reject(error);
+				}
 			});
-		};
+		});
+	};
+	
+	const checkDuplNick = (nickname) => {
+		return new Promise((resolve, reject) => {
+			$.ajax({
+				url: contextPath + '/test/checkduplnick.do',
+				method: 'POST',
+				contentType: 'text/plain',
+				data: nickname,
+				dataType: 'json',
+				success: function(response) {
+					if (response.status === 'ok') resolve(1);
+					else if (response.status === 'no') resolve(2);
+					else resolve(3);
+				},
+				error: function(error) {
+					console.error('AJAX 에러(아마도 응답없음)', error);
+					reject(error);
+				}
+			});
+		});
+	};
 	
 	// 아이디 패턴 일치여부 확인 후 중복검사 해서 화면에 출력하는 함수
-	const validateLoginID = async (loginId) => {
-		if(!loginId) {
+	const validateLoginID = async (loginId) => { // async 사용
+		isIdOK = false; // 아이디 검증여부 초기화
+		if(!loginId) { // 들어온 값이 없으면
 			$('#user-id').removeClass('is-invalid');
 			$('#user-id').removeClass('is-valid');
 			$('#id-msg').html('');
@@ -46,9 +77,10 @@ $(function() {
 		if (!/[A-Za-z]/.test(loginId)) errors.push("영문자를 최소 1자 포함해야 합니다.");
 		if (!/\d/.test(loginId)) errors.push("숫자를 최소 1자 포함해야 합니다.");
 		if (/[^A-Za-z\d]/.test(loginId)) errors.push("영문자와 숫자 이외의 문자는 사용할 수 없습니다.");
-
-		if (errors.length === 0) {
-			const result = await checkDupl(loginId); // ✅ await 사용 가능
+		// 각종 유효성검사 시키고 에러문구 담기
+			
+		if (errors.length === 0) { // 유효성검사 통과 시
+			const result = await checkDupl(loginId); // await 사용
 			switch (result) {
 				case 1:
 					$('#id-msg').css("color", "green");
@@ -61,7 +93,7 @@ $(function() {
 					errors.push("이미 존재하는 아이디입니다.");
 					break;
 				case 3:
-					errors.push("** 서버 통신 오류 **");
+					errors.push("** 서버 내부 오류 **");
 					break;
 				default:
 					errors.push("** 서버 응답 없음 **");
@@ -82,7 +114,6 @@ $(function() {
 			$('#pw-msg').html('');
 			return;
 		}
-		
 		
 		const msgs = [];
 
@@ -109,6 +140,7 @@ $(function() {
 	}
 	
 	const validatePW2 = (password2) => {
+		isPwChecked = false;
 		if(!password2) {
 			$('#user-pw2').removeClass('is-invalid');
 			$('#user-pw2').removeClass('is-valid');
@@ -127,13 +159,117 @@ $(function() {
 			$('#pw2-msg').html('입력하신 비밀번호와 일치합니다.');
 			$('#user-pw2').removeClass('is-invalid');
 			$('#user-pw2').addClass('is-valid');
+			isPwChecked = true;
 		}
 	}
+	
+	const validateName = (userName) => {
+		isNameOK = false;
+		if(!userName) {
+			$('#user-name').removeClass('is-invalid');
+			$('#user-name').removeClass('is-valid');
+			$('#name-msg').html('');
+			return;
+		}
+		
+		if(userName !== $('#name-msg').val()) {
+			$('#pw2-msg').css("color", "red");
+			$('#pw2-msg').html('비밀번호가 일치하지 않습니다.');
+			$('#user-pw2').removeClass('is-valid');
+			$('#user-pw2').addClass('is-invalid');
+			
+		} else {
+			$('#pw2-msg').css('color', 'green');
+			$('#pw2-msg').html('입력하신 비밀번호와 일치합니다.');
+			$('#user-pw2').removeClass('is-invalid');
+			$('#user-pw2').addClass('is-valid');
+			isPwChecked = true;
+		}
+	}
+	
+	const validateNickname = async (nickname) => { // 닉네임 패턴 검사 후 중복 검사
+		if(!nickname) { // 닉네임이 null이거나 empty 면
+			$('#nickname').removeClass('is-invalid');
+			$('#nickname').removeClass('is-valid');
+			$('#nick-msg').html('');
+			return;
+		}
+		
+		const errors = [];
+
+		if (nickname.length < 2) errors.push("6자 이상이어야 합니다.");
+		if (nickname.length > 10) errors.push("10자 이하여야 합니다.");
+		if (/[^A-Za-z\d가-힣ㄱ-ㅎㅏ-ㅣ]/.test(nickname)) errors.push("한글/영어/숫자만 사용할 수 있습니다.");
+
+		if (errors.length === 0) {
+			const result = await checkDuplNick(nickname);
+			switch (result) {
+				case 1:
+					$('#nick-msg').css("color", "green");
+					$('#nick-msg').html("사용 가능한 닉네임입니다.");
+					$('#nickname').removeClass('is-invalid');
+					$('#nickname').addClass('is-valid');
+					isNickOK = true;
+					return;
+				case 2:
+					errors.push("이미 존재하는 닉네임입니다.");
+					break;
+				case 3:
+					errors.push("** 서버 통신 오류 **");
+					break;
+				default:
+					errors.push("** 서버 응답 없음 **");
+			}
+		}
+
+		const errorMsg = errors.map(msg => msg + '<br>').join('');
+		$('#nickname').removeClass('is-valid');
+		$('#nickname').addClass('is-invalid');
+		$('#nick-msg').css("color", "red");
+		$('#nick-msg').html(errorMsg);
+	};
+	
+	function getAddressByPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 도로명 주소의 노출 규칙에 따라 주소를 표시한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+                // 건물명이 있고, 공동주택일 경우 추가한다.
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                   extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+                // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                $('#zipcode').val(data.zonecode);
+				$('#base-addr').val(roadAddr);
+                
+                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                if(roadAddr !== ''){
+                    $('#plus-addr').val(extraRoadAddr);
+                } else {
+                    $('#plus-addr').val('');
+                }
+            }
+        }).open();
+    }
 	
 	let timer; // 타이머 ID를 저장할 변수 선언 (디바운싱용). 
 	// 이걸 전역으로 선언해야 입력이 들어올 때마다 이전 타이머를 취소(clearTimeout)할 수 있음.
 	$("#user-id").on("input", function() { // 유저아이디 입력창에 입력이 들어오면
-		isIdOK = false; // 아이디가 바뀌니 아이디 검증여부는 기본값인 false로 변경
 		clearTimeout(timer);
 		// 기존에 설정된 타이머가 있으면 취소. 
 		// 이전 입력 이후 일정 시간 대기 후 실행될 예정이었던 함수 실행을 막음 (디바운싱 핵심).
@@ -161,5 +297,15 @@ $(function() {
 		}, 750);
 	});
 	
-	$('#id-dupl-btn').on('click', checkDupl);
+	$("#nickname").on("input", function() { // 유저아이디 입력창에 입력이 들어오면
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			validateNickname($('#nickname').val());
+		}, 750);	
+	});
+	
+	$('#zipcode-search').on('click', getAddressByPostcode);
+	
+	$('#debug').on('click', statusDebug);
+	
 });
