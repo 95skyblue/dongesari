@@ -18,7 +18,7 @@
 	<select id="checkNickname" parameterType="String" resultType="int">
 		SELECT count(*)
 		FROM member
-		WHERE "nickname" = #{nickname}	
+		WHERE "nickname" = #{nickname}
 	</select>
 	
 	<insert id = "storeEmailAuth" parameterType="emailAuthVO">
@@ -32,9 +32,18 @@
 		where email = #{email} and code = #{code} and auth_token = #{authToken}
 	</select>
 	
-<!-- 	<insert id = "register" parameterType="RegisterDTO"> -->
-<!-- 		INSERT INTO MEMBER (mem_id, login_id, name, nickname) -->
-<!-- 		VALUES -->
-<!-- 	</insert> -->
+	<insert id="insertAddress" parameterType="addressVO">
+	    <selectKey resultType="int" keyProperty="addrId" order="BEFORE">
+	        SELECT address_seq.NEXTVAL FROM dual
+	    </selectKey>
+	    
+	    INSERT INTO address ("addr_id", "zipcode", "base_addr", "plus_addr")
+	    VALUES (#{addrId}, #{zipcode}, #{baseAddr}, #{plusAddr})
+	</insert>
+	
+	<insert id="insertMember" parameterType="memberVO">
+		insert into member("mem_id", "login_id", "password", "name", "nickname", "email", "addr_id")
+		values (member_seq.nextval, #{loginId}, #{password}, #{name}, #{nickname}, #{email}, #{addrId})
+	</insert>
 	
 </mapper>

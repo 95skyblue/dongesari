@@ -8,6 +8,7 @@ import javax.mail.Message;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
@@ -20,7 +21,7 @@ public class EmailSender {
         return String.valueOf(code);
     }
 
-    public static void sendEmail(String verificationCode, String recipientEmail) {
+    public static void sendEmail(String verificationCode, String recipientEmail) throws AddressException {
         final String senderEmail = "disfute77@gmail.com"; // 보내는 사람 이메일
         final String senderPassword = "pmmfklslmhmmkeph"; // 앱 비밀번호 (2단계 인증 필요)
 
@@ -52,13 +53,10 @@ public class EmailSender {
             // 전송
             Transport.send(message);
             System.out.println("이메일 전송 성공! 인증코드: " + verificationCode);
+        } catch (AddressException e) {
+            throw new AddressException();
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    // 테스트용 main
-    public static void main(String[] args) {
-        sendEmail(generateCode(), "theodore9999@naver.com");
     }
 }

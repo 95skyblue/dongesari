@@ -11,7 +11,9 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.dongnesari.comm.test.dto.LoginDTO;
 import com.dongnesari.comm.test.dto.SessionDTO;
+import com.dongnesari.comm.test.vo.AddressVO;
 import com.dongnesari.comm.test.vo.EmailAuthVO;
+import com.dongnesari.comm.test.vo.MemberVO;
 
 public class TestDAO {
 	private SqlSessionFactory ssf; // SqlSessionFactory는 생성자에서 초기화
@@ -89,6 +91,17 @@ public class TestDAO {
 		} finally { ss.close(); }
 	}
 	
+	public int insertAddress(AddressVO vo) {
+		ss = ssf.openSession(true);
+		try {
+			if(ss.insert("test.insertAddress", vo) > 0) {
+				return vo.getAddrId();
+			} else {
+				throw new IllegalStateException("주소 정보 insert 실패");
+			}
+		} finally { ss.close(); }
+	}
+	
 	// 로그인 시도 메서드. 성공하면 LoginSessionDTO를 반환
 	// 로그인 실패하면 loginFail, 내부 오류면 loginError 코드 반환
 	public SessionDTO login(LoginDTO dto) {
@@ -97,6 +110,13 @@ public class TestDAO {
 			SessionDTO sessionDTO = ss.selectOne("test.login", dto);
 			if(sessionDTO == null) throw new IllegalArgumentException("loginFail");
 			else return sessionDTO;
+		} finally { ss.close(); }
+	}
+	
+	public boolean insertMember(MemberVO vo) {
+		ss = ssf.openSession(true);
+		try {
+			return ss.insert("test.insertMember", vo) > 0;
 		} finally { ss.close(); }
 	}
 }
