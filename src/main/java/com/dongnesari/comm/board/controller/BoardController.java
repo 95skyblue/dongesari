@@ -83,9 +83,7 @@ public class BoardController extends HttpServlet {
 	        out.print("{\"result\":\"글 등록 실패ㅠㅠ\"}");
 	    }
 	    out.flush();
-		
-		
-		
+	
 	}
 	
 	
