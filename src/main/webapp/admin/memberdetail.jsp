@@ -21,7 +21,24 @@
 <body>
 <div class="container mt-5">
   <h2 class="mb-4">회원 상세 정보</h2>
+  
+  
+    <!-- 회원 사진 영역 -->
+  <div class="text-center mb-4">
+    <img 
+    	 src="<%= request.getContextPath() %>/images/ganadi2.jpg" <%--가짜 사진 경로 --%>
+    	 <%-- 진짜 사진경로 src="<%=request.getContextPath()%>/images/default-profile.png" --%> 
+         alt="회원 사진" 
+         class="rounded-circle border shadow" 
+         style="width: 150px; height: 150px; object-fit: cover;">
+    <p class="mt-2 text-muted">
+    ※ 추후 사진이 등록되면 여기에 경로따와서 표시
+   
+    </p>
+  </div>
 
+
+	<!-- 회원데이터영영 -->
   <table class="table table-bordered">
     <tr>
       <th>회원 ID</th>

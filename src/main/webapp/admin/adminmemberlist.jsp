@@ -11,6 +11,10 @@
 <!-- head 태그 안에 Bootstrap Icons CDN 추가 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
+<!-- css링크  -->
+<link rel="stylesheet" href="../css/admin.css">
+
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/memberList.js"></script>
 
@@ -52,9 +56,11 @@
 	        </div>
 	      </div>
 	
-	
-	  	 
-		  <!-- 검색어 -->
+		 <!-- 열이 4칸있음 -->
+		 <!-- 칸밀기용 div 부트스트랩으로 만든 폼이라 이거 말고는 미는 방법을 모르곘음!! -->
+	  	 <div class="col-md-3"></div>
+		  
+	      <!-- 검색어 -->
 	      <div class="col-md-3">
 	        <label for="keyword" class="form-label">검색어 입력</label>
 	        <input type="text" class="form-control" id="keyword" name="keyword" placeholder="검색어를 입력하세요">

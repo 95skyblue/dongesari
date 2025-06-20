@@ -1,0 +1,32 @@
+@charset "UTF-8";
+
+
+
+.mb-4 {
+	
+	border: 1px solid red;
+	
+}
+
+
+form {
+	
+	border: 1px solid blue;
+}
+
+/* 
+버튼색 조정 가능
+.btn-primary {
+	
+  background-color: #ff5722 !important;
+  border-color: #ff5722 !important;
+  
+}
+
+
+.btn-primary:hover {
+  background-color: #ff5722 !important;
+  border-color: #ff5722 !important;
+}
+
+ */
