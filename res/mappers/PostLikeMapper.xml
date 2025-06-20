@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.dongnesari.comm.like.dao.PostLikeMapper">
+
+	<!-- 좋아요 추가 SQL -->
+	<insert id="insertPostLike">
+		INSERT INTO POST_LIKE (post_id, mem_id, create_at)
+		VALUES (#{post_id}, #{mem_id}, SYSDATE)
+	</insert>
+	
+	<!--  좋아요 취소 SQL -->
+	<delete id="deletePostLike">
+	DELETE FROM POST_LIKE
+	WHERE post_id = #{post_id} AND mem_id = #{mem_id}
+	</delete>
+	
+	<select id="checkUserLiked" resultType="int">
+		SELECT COUNT(*) FROM POST_LIKE
+		WHERE post_id = #{post_id} AND mem_id = #{mem_id}
+	</select>
+	
+	<select id="countLikesByPost" resultType="int">
+		SELECT COUNT(*) FROM POST_LIKE
+		WHERE post_id = #{postId}
+	</select>
+</mapper>

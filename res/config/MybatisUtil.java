@@ -40,5 +40,14 @@ public class MybatisUtil {
 		
 		return sessionFactory.openSession();
 	}
+	
+	// 오토커밋
+	public static SqlSession getSqlSession(boolean autoCommit) {
+		return sessionFactory.openSession(autoCommit);
+	}
+	// 수동커밋
+	public static SqlSession getSqlSession() {
+        return getSqlSession(false);
+	}
 
 }

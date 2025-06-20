@@ -32,5 +32,6 @@
         <mapper resource="mappers/member.xml"/>
         <mapper resource="mappers/post.xml"/>
         <mapper resource="mappers/test.xml"/>
+        <mapper resource="mappers/PostLikeMapper.xml"/>
     </mappers>
 </configuration>
