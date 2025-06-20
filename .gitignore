@@ -1,0 +1,25 @@
+# Java class files
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# IDE 설정 파일
+.classpath
+.project
+.settings/
+
+# 빌드/배포 폴더
+/build/
+/bin/
+/target/
+
+# OS 및 기타
+.DS_Store
+Thumbs.db
+*.log
+
+# 업로드된 사용자 파일 제외
+/webapp/upload/
