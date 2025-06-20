@@ -22,3 +22,6 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# 이메일 비밀번호 프로퍼티 파일 무시
+res/properties/emailSender.properties
