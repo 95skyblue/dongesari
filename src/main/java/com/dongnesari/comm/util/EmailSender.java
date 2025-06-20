@@ -22,8 +22,8 @@ public class EmailSender {
     }
 
     public static void sendEmail(String verificationCode, String recipientEmail) throws AddressException {
-        final String senderEmail = "disfute77@gmail.com"; // 보내는 사람 이메일
-        final String senderPassword = "pmmfklslmhmmkeph"; // 앱 비밀번호 (2단계 인증 필요)
+        final String senderEmail = PropertyReader.getSenderEmail();
+        final String senderPassword = PropertyReader.getSenderPassword();
 
         String subject = "이메일 인증 코드";
         String body = "인증 코드는 다음과 같습니다:\n\n" + verificationCode;
