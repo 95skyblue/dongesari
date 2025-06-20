@@ -11,6 +11,9 @@ public interface IMemberDao {
 	// 회원 전체 조회
 	public List<MemberVO>  getAllMember();
 	
+	// 회원 상세 조회
+	public MemberVO getMemberDetail(String memId);
+	
 	public MemberVO  loginMember(MemberVO  vo);
 	
 	
@@ -22,4 +25,6 @@ public interface IMemberDao {
 	
 	//저장하기 - 가입하기
 	public int insertMember(MemberVO vo);
+	
+	
 }

@@ -9,5 +9,10 @@
 	    SELECT * FROM member
 	</select>
 	
+	<!-- 로그인 아이디로 회원 상세페이지 넘어가기 -->
+	<select id="getMemberDetail" parameterType="string" resultType="MemberVO">
+ 	 SELECT * FROM member WHERE "login_id" = #{memId}
+	</select>
+	
 	
 </mapper>

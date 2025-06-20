@@ -25,7 +25,8 @@ public class MemberServiceImpl implements IMemberService {
 		public MemberServiceImpl() {
 			dao = MemberDaoImpl.getDao();
 		}
-
+		
+		
 		@Override
 		public List<MemberVO> getAllMember() {
 			// TODO Auto-generated method stub
@@ -54,6 +55,13 @@ public class MemberServiceImpl implements IMemberService {
 		public int insertMember(MemberVO vo) {
 			// TODO Auto-generated method stub
 			return dao.insertMember(vo);
+		}
+
+
+		@Override
+		public MemberVO getMemberDetail(String memId) {
+			// TODO Auto-generated method stub
+			return dao.getMemberDetail(memId);
 		}
 
 

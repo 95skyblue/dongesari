@@ -2,6 +2,7 @@ package com.dongnesari.comm.admin.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
 
 import com.dongnesari.comm.admin.vo.MemberVO;
@@ -51,6 +52,8 @@ public class MemberDaoImpl implements IMemberDao {
 			
 			return list;
 		}
+		
+		
 
 		 /**
 	     * 로그인 확인 메서드 (ID/PW 확인)
@@ -156,6 +159,23 @@ public class MemberDaoImpl implements IMemberDao {
 			}
 			
 			return res;	
+		}
+
+		// 회원 상세정보 조회
+		@Override
+		public MemberVO getMemberDetail(String memId) {
+			
+			MemberVO mv = null;
+			
+			try (SqlSession session = MybatisUtil.getInstance();) {
+				
+				mv = session.selectOne("member.getMemberDetail", memId);
+				
+			}catch(PersistenceException ex) {
+				ex.printStackTrace();
+			}
+			
+			return mv;
 		}
 
 

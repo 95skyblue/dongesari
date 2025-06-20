@@ -38,6 +38,9 @@ public class MemberListServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    SqlSession sql = MybatisUtil.getInstance();
 	    List<MemberVO> list = sql.selectList("member.getAllMember");
+	    
+	    // null 제거 (🚨 이거 꼭 필요!)
+	    list.removeIf(member -> member == null);
 
 	    // JSON으로 바로 응답
 	    response.setContentType("application/json;charset=utf-8");

@@ -7,6 +7,7 @@ import com.dongnesari.comm.admin.vo.ZipVO;
 
 public interface IMemberService {
 	//매소드 선언 
+	
 		public List<MemberVO>  getAllMember();
 		
 		public MemberVO  loginMember(MemberVO  vo);
@@ -20,5 +21,9 @@ public interface IMemberService {
 		
 		//저장하기 - 가입하기
 		public int insertMember(MemberVO vo);
+
+		
+		//회원 상세 검색
+		public MemberVO getMemberDetail(String memId);
 
 }
