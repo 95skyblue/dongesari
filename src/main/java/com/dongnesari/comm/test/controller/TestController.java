@@ -8,11 +8,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.mail.internet.AddressException;
+
 import com.dongnesari.comm.test.dao.TestDAO;
 import com.dongnesari.comm.test.dto.LoginDTO;
 import com.dongnesari.comm.test.dto.SessionDTO;
 import com.dongnesari.comm.test.service.TestService;
+import com.dongnesari.comm.test.vo.AddressVO;
 import com.dongnesari.comm.test.vo.EmailAuthVO;
+import com.dongnesari.comm.test.vo.MemberVO;
+import com.dongnesari.comm.util.LDTGson;
 import com.dongnesari.comm.util.ServletUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,6 +52,7 @@ public class TestController extends HttpServlet {
 	    validPaths.add("/checkduplnick.do");
 	    validPaths.add("/sendcode.do");
 	    validPaths.add("/checkemailcode.do");
+	    validPaths.add("/register.do");
 
 	    if (!validPaths.contains(action)) { // 이놈이 지원하는 경로가 아니면
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404 오류 보내기
@@ -83,6 +89,9 @@ public class TestController extends HttpServlet {
 	    		break;
 	    	case "/checkemailcode.do" :
 	    		handleCheckEmailCodeDo(request, response);
+	    		break;
+	    	case "/register.do" :
+	    		handleRegisterDo(request, response);
 	    		break;
 	    	default : 
 	    		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -191,18 +200,23 @@ public class TestController extends HttpServlet {
 		System.out.println(email);
 		
 		TestService service = TestService.getInstance();
+		Map<String, String> result = new HashMap<>();
 		
-		String code = service.sendCodeToThisEmail(email);
 		
-		if(code != null) {
+		String code;
+		try {
+			code = service.sendCodeToThisEmail(email);
+			
 			String uuid = UUID.randomUUID().toString();
 			HttpSession session = request.getSession();
 			session.setAttribute("emailAuthToken", uuid);
 			service.storeThisToEmailTable(email, code, uuid);
+			
+			result.put("status", "ok");
+		} catch (AddressException e) {
+			result.put("status", "no");
+			result.put("msg", "해당 주소로 이메일을 보내지 못했습니다.");
 		}
-		
-		Map<String, String> result = new HashMap<>();
-		result.put("status", (code != null) ? "ok" : "no");
 		
 		Gson gson = new Gson();
 		response.setContentType("application/json");
@@ -244,6 +258,40 @@ public class TestController extends HttpServlet {
 			} else {
 				result.put("status", "not-found");
 			}
+		}
+		
+		response.setContentType("application/json");
+		response.getWriter().write(gson.toJson(result));
+	}
+	
+	private void handleRegisterDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 요청 바디(JSON) 읽기
+		String jsonStr = ServletUtil.readRequestBody(request);
+		
+		System.out.println("어 최종 회원가입 처리중이여");
+		System.out.println(jsonStr);
+		
+		HttpSession session = request.getSession();
+		String verifiedEmail = (String) session.getAttribute("verifiedEmail");
+		
+		TestService service = TestService.getInstance();
+		
+		Gson gson = LDTGson.create();
+		MemberVO memberVO = gson.fromJson(jsonStr, MemberVO.class);
+		AddressVO addressVO = gson.fromJson(jsonStr, AddressVO.class);
+		
+		// 디버그용
+		System.out.println(memberVO.toLogString());
+		System.out.println(addressVO.toLogString());
+		
+		Map<String, String> result = new HashMap<>(); // 보낼 메시지 작성용
+		
+		try {
+			service.registerThisMan(memberVO, addressVO, verifiedEmail); // 회원가입 시켜
+			result.put("status", "ok");
+		} catch (IllegalStateException e) {
+			result.put("status", "no");
+			result.put("errorMsg", e.getMessage());
 		}
 		
 		response.setContentType("application/json");

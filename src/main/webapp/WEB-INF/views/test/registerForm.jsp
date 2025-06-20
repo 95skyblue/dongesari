@@ -35,7 +35,7 @@
 		<div class="row align-items-center mt-2">
 			<label for="user-id" class="col-form-label col-2">ID</label>
 			<div class="col-5">
-				<input type="text" class="form-control" id="user-id" name="memId" aria-describedby="id-msg">
+				<input type="text" class="form-control" id="user-id" name="loginId" aria-describedby="id-msg">
 			</div>
 			<div class="offset-2">
 				<div id="id-msg" class="form-text">영문/숫자 혼합 6~20글자</div>
@@ -46,7 +46,7 @@
 		<div class="row align-items-center mt-2">
 			<label for="user-pw" class="col-form-label col-2">PW</label>
 			<div class="col-5">
-				<input type="password" class="form-control" id="user-pw" name="memPw" aria-describedby="pw-msg">
+				<input type="password" class="form-control" id="user-pw" name="password" aria-describedby="pw-msg">
 			</div>
 			<div class="offset-2">
 				<div id="pw-msg" class="form-text">영문/숫자 혼합 8~20글자</div>
@@ -101,7 +101,7 @@
 		<div class="row align-items-center mt-2">
 			<label for="base-addr" class="col-form-label col-2">기본주소</label>
 			<div class="col-6">
-				<input type="text" class="form-control" id="base-addr" name="base_addr">
+				<input type="text" class="form-control" id="base-addr" name="baseAddr">
 			</div>
 		</div>
 
@@ -109,7 +109,7 @@
 		<div class="row align-items-center mt-2">
 			<label for="plus-addr" class="col-form-label col-2">상세주소</label>
 			<div class="col-6">
-				<input type="text" class="form-control" id="plus-addr" name="plus_addr">
+				<input type="text" class="form-control" id="plus-addr" name="plusAddr">
 			</div>
 		</div>
 

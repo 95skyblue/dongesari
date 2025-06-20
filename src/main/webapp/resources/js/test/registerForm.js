@@ -388,28 +388,25 @@ $(function() {
 
 	// 회원가입 요청 함수
 	const register = () => {
-		const formData = $('#login-form').serializeJSON();
-		console.log(formData);
-
-		// $.ajax({
-		// 	url: contextPath + '/test/register.do',
-		// 	method: 'POST',
-		// 	contentType: 'application/json',
-		// 	data: loginId, // 시리얼라이즈제이슨 라이브러리 써서 폼태그에 네임붙어있는거 다 갖고오기
-		// 	dataType: 'json',
-		// 	success: function(response) {
-		// 		if (response.status === 'ok') {
-		// 			// 서버측 유효성검사 통과하고 db에도 회원 정보를 저장했을 경우
-		// 		} else if (response.status === 'no') {
-		// 			// 클라이언트측 유효성 검사와는 별개로 서버 유효성검사를 못통과할경우
-		// 		} else {
-		// 			// 다른 상태가 있나? 상태 메시지를 id-invalid 같은걸로 다 해놓을까?
-		// 		}
-		// 	},
-		// 	error: function(error) {
-		// 		console.error('AJAX 에러(아마도 응답없음)', error);
-		// 	}
-		// });
+		$.ajax({
+			url: contextPath + '/test/register.do',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify($('#login-form').serializeJSON()), 
+			dataType: 'json',
+			success: function(response) {
+				if (response.status === 'ok') {
+					alert('회원가입 완료!');
+					window.location.href = contextPath + '/test/login';
+				} else {
+					alert(response.errorMsg);
+					// 나중엔 퉁치치 말고 제대로 뭐가틀렸는지 표시하도록
+				}
+			},
+			error: function(error) {
+				console.error('AJAX 에러(아마도 응답없음)', error);
+			}
+		});
 	};
 
 
@@ -458,8 +455,7 @@ $(function() {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			validatePW($('#user-pw').val()); // 비번검증후 출력하고
-			if(isPwOK && $('#user-pw2').val()) validatePW2($('#user-pw2').val());
-			// 비번검사 통과했고 비번확인창에 입력있을때만 비번확인 같이 하기.
+			validatePW2($('#user-pw2').val());
 			isAllOk();
 		}, 750);
 	});
