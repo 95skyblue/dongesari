@@ -75,17 +75,9 @@
 
 <div class="container">
     <h2>📌 게시글 작성 (비동기)</h2>
-    <form id="postForm">
-        <label for="postTitle">제목</label>
-        <input type="text" id="postTitle" name="postTitle" required>
-
-        <label for="content">내용</label>
-        <textarea id="content" name="content" required></textarea>
-
-        <label for="memId">작성자 ID</label>
-        <input type="text" id="memId" name="memId" required>
-
-        <label for="categoryId">카테고리</label>
+    <form id="postForm" enctype="multipart/form-data">
+    	
+    	<label for="categoryId">카테고리</label>
         <select id="categoryId" name="categoryId" required>
             <option value="" disabled selected>카테고리를 선택하세요</option>
             <option value="1">공지사항</option>
@@ -93,6 +85,21 @@
             <option value="3">칭찬</option>
             <option value="4">동네생활</option>
         </select>
+    
+        <label for="postTitle">제목</label>
+        <input type="text" id="postTitle" name="postTitle" required>
+        
+        <label for="upload">이미지 첨부</label>
+        <input type="file" id="upload" name="upload" accept="image/*" multiple>
+        
+        <!-- 미리보기 영역 -->
+        <div id="preview"></div>
+
+        <label for="content">내용</label>
+        <textarea id="content" name="content" required></textarea>
+
+        <label for="memId">작성자 ID</label>
+        <input type="text" id="memId" name="memId" required>
 
         <button type="button" id="write">등록하기</button>
         <div class="msg" id="msgBox"></div>
