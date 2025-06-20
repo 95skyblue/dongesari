@@ -6,13 +6,25 @@
 	<!-- 글쓰기  -->
 	<insert id="insertPost" parameterType="PostVO">
 		insert into POST (
-			post_id, mem_id, category_id, post_title, content, create_at, post_stat, version_now
+			"post_id",
+			"mem_id",
+			"category_id",
+			"post_title",
+			"content",
+			"create_at",
+			"post_stat",
+			"version_now"
 		)
 		values (
-			#{postId}, #{memId}, #{categoryId}, #{postTitle}, #{content}, SYSDATE, 'ACTIVE', 1
+			post_seq.nextval,
+			#{memId},
+			#{categoryId},
+			#{postTitle},
+			#{content},
+			SYSDATE,
+			'ACTIVE',
+			1
 		)	
 	</insert>
-	
-	
-	
+
 </mapper>

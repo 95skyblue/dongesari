@@ -26,6 +26,7 @@ public class PostDAOImpl implements IPostDAO {
 		int res = 0;
 		
 		try {
+			res = session.insert("post.insertPost", vo);
 			
 		}catch(Exception ex) {
 			ex.printStackTrace();

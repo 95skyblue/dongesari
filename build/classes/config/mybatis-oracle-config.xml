@@ -12,8 +12,9 @@
     </settings>
 	
 	<typeAliases>
-       <typeAlias alias="LoginDTO" type="dnsr.test.dto.LoginDTO"/> 
-       <typeAlias alias="SessionDTO" type="dnsr.test.dto.SessionDTO"/> 
+       <typeAlias alias="LoginDTO" type="com.dongnesari.comm.test.dto.LoginDTO"/> 
+       <typeAlias alias="SessionDTO" type="com.dongnesari.comm.test.dto.SessionDTO"/>
+       <typeAlias alias="PostVO" type="com.dongnesari.comm.board.vo.PostVO"/> 
     </typeAliases>
 	
 	<environments default="oracle">
