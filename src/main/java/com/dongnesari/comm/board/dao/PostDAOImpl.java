@@ -1,6 +1,7 @@
 package com.dongnesari.comm.board.dao;
 
 import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 
 import com.dongnesari.comm.board.vo.PostVO;
 
@@ -9,6 +10,7 @@ import config.MybatisUtil;
 public class PostDAOImpl implements IPostDAO {
 	
 	private static IPostDAO dao;
+	private SqlSessionFactory factory;
 	
 	public static IPostDAO getDao() {
 		if(dao == null) dao = new PostDAOImpl();
@@ -17,7 +19,8 @@ public class PostDAOImpl implements IPostDAO {
 	
 	//생성자
 	public PostDAOImpl() {
-		
+		//
+		factory = MybatisUtil.getSqlSessionFactory();
 	}
 	
 	@Override
@@ -38,6 +41,15 @@ public class PostDAOImpl implements IPostDAO {
 		}
 		
 		return res;
+	}
+
+	@Override
+	public PostVO getPostDetail(Integer postId) {
+		
+		try(SqlSession session = factory.openSession()){
+			return session.selectOne("post.postDetail", postId);
+		}
+
 	}
 
 }

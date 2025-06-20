@@ -89,17 +89,17 @@
         <label for="postTitle">제목</label>
         <input type="text" id="postTitle" name="postTitle" required>
         
+        <label for="memId">작성자 ID</label>
+        <input type="text" id="memId" name="memId" required>
+        
         <label for="upload">이미지 첨부</label>
-        <input type="file" id="upload" name="upload" accept="image/*" multiple>
+        <input type="file" id="upload" name="upload" accept="image/*" multiple><br><br>
         
         <!-- 미리보기 영역 -->
         <div id="preview"></div>
 
         <label for="content">내용</label>
         <textarea id="content" name="content" required></textarea>
-
-        <label for="memId">작성자 ID</label>
-        <input type="text" id="memId" name="memId" required>
 
         <button type="button" id="write">등록하기</button>
         <div class="msg" id="msgBox"></div>

@@ -29,17 +29,43 @@ public class BoardController extends HttpServlet {
 				break;
 			case "/write":
 //				handleWrite(request, response);
+			case "/detail":
+				handleDetail(request, response);
 				break;
 			default:
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
+	//글 상세보기
+	private void handleDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		//디버깅로그
+		System.out.println("postId 파라미터: " + request.getParameter("postId"));
+
+		
+		//파라미터로 글 번호 받아오기
+		Integer postId = Integer.parseInt(request.getParameter("postId"));
+		
+		//서비스 호출
+		IPostService service = PostServiceImpl.getService();
+		PostVO vo = service.getPostDetail(postId);
+		
+		//객체 null 확인용 로그
+		System.out.println("post 객체 확인 : " + vo);
+		
+		//jsp에 전달
+		request.setAttribute("post", vo);
+		
+		//상세보기 페이지로 이동
+		request.getRequestDispatcher("/post/postDetail.jsp").forward(request, response);
+		
+	}
+
 	private void handleMain(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/views/board/boardMain.jsp").forward(request, response);
 	}
 
-	
+	//글쓰기
 	private void handleWrite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		/*
@@ -99,7 +125,5 @@ public class BoardController extends HttpServlet {
 			 response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		 }
 	}
-	
-	
-	
+
 }
