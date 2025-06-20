@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "admin">
+	
+	
+	<!-- 관리자 전체 조회 -->
+	<select id="getAllAdmin" resultType="adminVO">
+	    SELECT * FROM ADMIN
+	</select>
+	
+	<!-- 관리자 추가 -->
+	<insert id="insertAdmin" parameterType="adminVO">
+	    INSERT INTO ADMIN (
+	        adm_id,
+	        adm_login_id,
+	        adm_pw,
+	        adm_name,
+	        rsdnt_num
+	    )
+	    VALUES (
+	        'adm' || ADMIN_SEQ.NEXTVAL,
+	        #{adm_login_id},
+	        #{adm_pw},
+	        #{adm_name},
+	        #{rsdnt_num}
+	    )
+	</insert>
+	
+	
+</mapper>

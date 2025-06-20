@@ -15,8 +15,7 @@
 <link rel="stylesheet" href="../css/admin.css">
 
 
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/memberList.js"></script>
+
 
 <body>
 
@@ -137,6 +136,9 @@
     <tbody id="memberList"></tbody>
   </table>
 </div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/memberList.js"></script>
 
 </body>
 </html>

@@ -10,7 +10,7 @@ import com.dongnesari.comm.admin.vo.ZipVO;
 import com.dongnesari.comm.util.MybatisUtil;
 
 public class MemberDaoImpl implements IMemberDao {
-
+  
 
 	//싱글톤패턴 - 자기 자신의 객체 - service에서  공유 해서 사용  
 		//싱글톤 패턴 적용: dao 객체를 static으로 하나만 생성
