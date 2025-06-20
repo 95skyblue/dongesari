@@ -1,4 +1,3 @@
-
 $(function() {
 	// 스크립트 익스터널 방식으로 분리할 경우 jsp에서 제공하는 request.contextPath()를 못 쓰므로
 	// jsp는 바디의 data-context에 미리 저장해두고, 스크립트는 그 속성을 뽑아서 씀.
@@ -9,17 +8,32 @@ $(function() {
 	let isPwChecked = false;
 	let isNameOK = false;
 	let isNickOK = false;
+	let isAddrOK = false;
 	let isEmailOK = false;
+	let isEmailVerified = false;
 	
-	const statusDebug = () => {
-		console.log("아이디 통과여부", isIdOK);
-		console.log("비번 통과여부", isPwOK);
-		console.log("비번확인 통과여부", isPwChecked);		
-		console.log("이름 통과여부", isNameOK);
-		console.log("닉네임 통과여부", isNickOK);
-		console.log("이메일 유효성검사여부", isEmailOK)
-	}
-	
+	const debug = () => {
+		if (isIdOK) console.log('아이디 OK'); else console.error('아이디 미통과');
+		if (isPwOK) console.log('비밀번호 OK'); else console.error('비밀번호 미통과');
+		if (isPwChecked) console.log('비밀번호 확인 OK'); else console.error('비밀번호 확인 미통과');
+		if (isNameOK) console.log('이름 OK'); else console.error('이름 미통과');
+		if (isNickOK) console.log('닉네임 OK'); else console.error('닉네임 미통과');
+		if (isAddrOK) console.log('주소 입력 OK'); else console.error('주소 필수값 미통과');
+		if (isEmailOK) console.log('이메일 형식 OK'); else console.error('이메일 형식 미통과');
+		if (isEmailVerified) console.log('이메일 인증 OK'); else console.error('이메일 인증 미통과');
+	};
+
+	const isAllOk = () => {
+		debug();
+		if (isIdOK && isPwOK &&	isPwChecked && isNameOK && isNickOK && isAddrOK && isEmailOK && isEmailVerified) {
+			$('#register-btn').prop('disabled', false);
+			$('#register-btn').addClass('shiny');
+		} else {
+			$('#register-btn').prop('disabled', true);
+			$('#register-btn').removeClass('shiny');
+		}
+	};
+
 	// 아이디 사용 가능한지 요청 날려서 코드 반환하는 함수
 	const checkDupl = (loginId) => {
 		return new Promise((resolve, reject) => {
@@ -207,7 +221,7 @@ $(function() {
 		
 		const errors = [];
 
-		if (nickname.length < 2) errors.push("6자 이상이어야 합니다.");
+		if (nickname.length < 2) errors.push("2자 이상이어야 합니다.");
 		if (nickname.length > 10) errors.push("10자 이하여야 합니다.");
 		if (/[^A-Za-z\d가-힣ㄱ-ㅎㅏ-ㅣ]/.test(nickname)) errors.push("한글/영어/숫자만 사용할 수 있습니다.");
 
@@ -273,32 +287,160 @@ $(function() {
                     $('#plus-addr').val(extraRoadAddr);
                 } else {
                     $('#plus-addr').val('');
-                }
+                }		
+				isAddrExist();
+				isAllOk();
             }
         }).open();
     }
 	
+	const isAddrExist = () => {
+		if(!$('#zipcode').val() || !$('#base-addr').val()) {
+			isAddrOK = false;
+		} else {
+			isAddrOK = true;
+		}		
+	}
+
 	const validateEmail = (email) => {
+	$('#email').removeClass('is-invalid');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
         $('#email-msg').text("이메일 형식이 아닌 것 같아요.");
         $('#email-msg').css("color", "red");
-        $('#email-identify').prop("disabled", true); // 버튼 비활성화
+        $('#email-btn').prop("disabled", true); // 버튼 비활성화
+		$('#email').addClass('is-invalid');
         isEmailOK = false;
     } else {
 		$('#email-msg').text('');
-        $('#email-identify').prop("disabled", false); // 버튼 활성화
+        $('#email-btn').prop("disabled", false); // 버튼 활성화
         isEmailOK = true;
     }
 };
 	
-	const sendVerifyMail = (email) => {
-		if(/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
-			$('#email-msg').text("이메일 형식이 아닌 것 같아요.");
-			$('#email-msg').css("color", "red");
-		}
-
+	const sendVerifyMail = () => {
+		$('#email-spin').removeClass('visually-hidden');
+	
+		$.ajax({
+			url: contextPath + '/test/sendcode.do',
+			method: 'POST',
+			contentType: 'text/plain',
+			data: $('#email').val(),
+			dataType: 'json',
+			success: function(response) {
+				if (response.status === 'ok') {
+					$('#veri-code-container').removeClass('collapse');
+					$('#veri-code-container').addClass('collapse.show');
+					
+					$('#verify-btn').prop('disabled', false);
+					if (mailTimer) clearInterval(mailTimer);
+					$('#code-btn').prop('disabled', false);
+					startTimer(300, $('#timer-box'), $('#code-btn'));
+				} else {
+					$('#email-msg').text("메일을 보내지 못했어요. 메일을 다시 확인해주세요.");
+					$('#email-msg').css("color", "red");
+				}
+			},
+			error: function(error) {
+				console.error('AJAX 에러', error);
+				alert('서버와의 연결이 원활하지 않습니다. 잠시 후 다시 시도해 보세요.');
+			},
+			complete: function() {
+				$('#email-spin').addClass('visually-hidden');
+			}
+		});
 	}
 	
+	const sendVerifyCode = () => {
+		$.ajax({
+			url: contextPath + '/test/checkemailcode.do',
+			method: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({
+				email: $('#email').val().trim(),
+				code: $('#veri-code').val().trim()
+			}),
+			dataType: 'json',
+			success: function(response) {
+				if (response.status === 'ok') {
+					// 정보가 다 맞으면 인증창 콜랩스는 다시 숨김
+					$('#veri-code-container').addClass('collapse');
+					$('#veri-code-container').removeClass('collapse.show');
+					$('#email').addClass('is-valid');
+					$('#email-msg').text("인증 성공!");
+					$('#email-msg').css("color", "green");
+					$('#email-btn').addClass("d-none");
+					isEmailVerified = true;
+					isAllOk();
+				} else if (response.status === 'not-found') {
+					$('#email-msg').text("인증에 실패했어요. 다시 인증해 주세요.");
+					$('#email-msg').css("color", "red");
+				} else {
+					$('#email-msg').text("인증번호를 전송하셨나요? 다시 메일을 보내야 해요.");
+					$('#email-msg').css("color", "red");
+				}
+			},
+			error: function(error) {
+				console.error('AJAX 에러', error);
+				alert('서버와의 연결이 원활하지 않습니다. 잠시 후 다시 시도해 보세요.');
+			}
+		});
+	}
+
+	// 회원가입 요청 함수
+	const register = () => {
+		const formData = $('#login-form').serializeJSON();
+		console.log(formData);
+
+		// $.ajax({
+		// 	url: contextPath + '/test/register.do',
+		// 	method: 'POST',
+		// 	contentType: 'application/json',
+		// 	data: loginId, // 시리얼라이즈제이슨 라이브러리 써서 폼태그에 네임붙어있는거 다 갖고오기
+		// 	dataType: 'json',
+		// 	success: function(response) {
+		// 		if (response.status === 'ok') {
+		// 			// 서버측 유효성검사 통과하고 db에도 회원 정보를 저장했을 경우
+		// 		} else if (response.status === 'no') {
+		// 			// 클라이언트측 유효성 검사와는 별개로 서버 유효성검사를 못통과할경우
+		// 		} else {
+		// 			// 다른 상태가 있나? 상태 메시지를 id-invalid 같은걸로 다 해놓을까?
+		// 		}
+		// 	},
+		// 	error: function(error) {
+		// 		console.error('AJAX 에러(아마도 응답없음)', error);
+		// 	}
+		// });
+	};
+
+
+	let mailTimer;
+
+	const startTimer = (duration, display, button) => {
+		let remaining = duration;
+
+		// 처음 표시
+		const formatTime = (seconds) => {
+			const min = String(Math.floor(seconds / 60)).padStart(2, '0');
+			const sec = String(seconds % 60).padStart(2, '0');
+			return `${min}:${sec}`;
+		};
+
+		display.text(formatTime(remaining));
+
+		mailTimer = setInterval(() => {
+			remaining--;
+			display.text(formatTime(remaining));
+
+			if (remaining <= 0) {
+				clearInterval(mailTimer);
+				button.prop('disabled', true);
+				display.text("시간초과");
+			}
+		}, 1000);
+	};
+
+	// 5분 타이머 종료 시 disabled 속성 추가
+
 	let timer; // 타이머 ID를 저장할 변수 선언 (디바운싱용). 
 	// 이걸 전역으로 선언해야 입력이 들어올 때마다 이전 타이머를 취소(clearTimeout)할 수 있음.
 	$("#user-id").on("input", function() { // 유저아이디 입력창에 입력이 들어오면
@@ -307,6 +449,7 @@ $(function() {
 		// 이전 입력 이후 일정 시간 대기 후 실행될 예정이었던 함수 실행을 막음 (디바운싱 핵심).
 		timer = setTimeout(() => { // 새로운 타이머를 설정. 입력이 멈춘 후 750ms가 지나면 다음 함수가 실행되도록 예약.
 			validateLoginID($('#user-id').val()); // 입력값을 읽어서 validateLoginID 함수에 전달 → 유효성 검사 등을 수행.
+			isAllOk();
 		}, 750); // 입력이 멈춘 뒤 750ms 후에 실행되도록 설정함.
 	});
 	
@@ -317,6 +460,7 @@ $(function() {
 			validatePW($('#user-pw').val()); // 비번검증후 출력하고
 			if(isPwOK && $('#user-pw2').val()) validatePW2($('#user-pw2').val());
 			// 비번검사 통과했고 비번확인창에 입력있을때만 비번확인 같이 하기.
+			isAllOk();
 		}, 750);
 	});
 	
@@ -326,6 +470,7 @@ $(function() {
 		timer = setTimeout(() => {
 			if(isPwOK) validatePW2($('#user-pw2').val());
 			// 비번검증됐을때만 비번2중체크 하기
+			isAllOk();
 		}, 750);
 	});
 	
@@ -333,6 +478,7 @@ $(function() {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			validateName($('#user-name').val());
+			isAllOk();
 		}, 750);	
 	});
 	
@@ -340,18 +486,47 @@ $(function() {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
 			validateNickname($('#nickname').val());
+			isAllOk();
 		}, 750);	
 	});
 	
 	$('#zipcode-search').on('click', getAddressByPostcode);
 	
-	$("#email").on("input", function() {
+	$('#zipcode').on("input", function() {
 		clearTimeout(timer);
 		timer = setTimeout(() => {
-			validateEmail($('#email').val().trim());
+			isAddrExist();
+			isAllOk();
 		}, 750);	
 	});
 
-	$('#debug').on('click', statusDebug);
-	
+	$('#base-addr').on("input", function() {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			isAddrExist();
+			isAllOk();
+		}, 750);	
+	});
+
+	$('#email').on("input", function() {
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			validateEmail($('#email').val().trim());
+			isAllOk();
+		}, 750);	
+	});
+
+	$('#email-btn').on('click', function() {
+		sendVerifyMail($('#email').val().trim());
+		isAllOk();
+	})
+
+	$('#code-btn').on('click', function() {
+		sendVerifyCode();
+		isAllOk();
+	})
+
+	$('#register-btn').on('click', function() {
+		register();
+	})
 });

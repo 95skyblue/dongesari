@@ -11,6 +11,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
 import com.dongnesari.comm.test.dto.LoginDTO;
 import com.dongnesari.comm.test.dto.SessionDTO;
+import com.dongnesari.comm.test.vo.EmailAuthVO;
 
 public class TestDAO {
 	private SqlSessionFactory ssf; // SqlSessionFactory는 생성자에서 초기화
@@ -74,8 +75,19 @@ public class TestDAO {
 		} finally { ss.close(); }
 	}
 	
+	public void storeEmailAuth(EmailAuthVO vo) {
+		ss = ssf.openSession(true);
+		try {
+			ss.insert("test.storeEmailAuth", vo);
+		} finally { ss.close(); }
+	}
 	
-	
+	public boolean checkEmailAuth(EmailAuthVO vo) {
+		ss = ssf.openSession(true);
+		try {
+			return (int) ss.selectOne("test.checkEmailAuth", vo) > 0;
+		} finally { ss.close(); }
+	}
 	
 	// 로그인 시도 메서드. 성공하면 LoginSessionDTO를 반환
 	// 로그인 실패하면 loginFail, 내부 오류면 loginError 코드 반환

@@ -1,6 +1,8 @@
 package com.dongnesari.comm.test.service;
 
 import com.dongnesari.comm.test.dao.TestDAO;
+import com.dongnesari.comm.test.vo.EmailAuthVO;
+import com.dongnesari.comm.util.EmailSender;
 
 public class TestService {
 	private static TestService instance;
@@ -23,5 +25,24 @@ public class TestService {
 	
 	public boolean canIUseThisNick(String nickname) {
 		return !dao.checkNickname(nickname);
+	}
+	
+	public String sendCodeToThisEmail(String email) {
+		String code = EmailSender.generateCode();
+		try {
+			EmailSender.sendEmail(code, email);
+			return code;
+		} catch(Exception e) {
+			return null;
+		}
+	}
+	
+	public void storeThisToEmailTable(String email, String code, String uuid) {
+		EmailAuthVO vo = new EmailAuthVO(email, code, uuid);
+		dao.storeEmailAuth(vo);
+	}
+	
+	public boolean checkThisEmailData(EmailAuthVO vo) {
+		return dao.checkEmailAuth(vo);
 	}
 }

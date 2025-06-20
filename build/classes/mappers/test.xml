@@ -20,6 +20,18 @@
 		FROM member
 		WHERE "nickname" = #{nickname}	
 	</select>
+	
+	<insert id = "storeEmailAuth" parameterType="emailAuthVO">
+		insert into email_auth_test (seq_id, email, code, expire_at, verified, auth_token)
+		values(email_auth_seq.nextval, #{email}, #{code}, sysdate + INTERVAL '5' minute, 'N', #{authToken})
+	</insert>
+	
+	<select id = "checkEmailAuth" parameterType="emailAuthVO" resultType="int">
+		select count(*)
+		from email_auth_test
+		where email = #{email} and code = #{code} and auth_token = #{authToken}
+	</select>
+	
 <!-- 	<insert id = "register" parameterType="RegisterDTO"> -->
 <!-- 		INSERT INTO MEMBER (mem_id, login_id, name, nickname) -->
 <!-- 		VALUES -->

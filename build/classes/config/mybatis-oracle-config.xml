@@ -12,9 +12,9 @@
     </settings>
 	
 	<typeAliases>
-        
-    </typeAliases>
-	
+	    <package name="com.dongnesari.comm.test.vo"/>
+	</typeAliases>
+
 	<environments default="oracle">
 		<environment id="oracle">
 			<transactionManager type="JDBC"/>

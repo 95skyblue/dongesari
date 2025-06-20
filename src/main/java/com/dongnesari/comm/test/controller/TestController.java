@@ -1,17 +1,24 @@
 package com.dongnesari.comm.test.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import com.dongnesari.comm.test.dao.TestDAO;
 import com.dongnesari.comm.test.dto.LoginDTO;
 import com.dongnesari.comm.test.dto.SessionDTO;
 import com.dongnesari.comm.test.service.TestService;
+import com.dongnesari.comm.test.vo.EmailAuthVO;
 import com.dongnesari.comm.util.ServletUtil;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -38,6 +45,8 @@ public class TestController extends HttpServlet {
 	    validPaths.add("/register");
 	    validPaths.add("/checkdupl.do");
 	    validPaths.add("/checkduplnick.do");
+	    validPaths.add("/sendcode.do");
+	    validPaths.add("/checkemailcode.do");
 
 	    if (!validPaths.contains(action)) { // 이놈이 지원하는 경로가 아니면
 	        response.sendError(HttpServletResponse.SC_NOT_FOUND); // 404 오류 보내기
@@ -68,6 +77,12 @@ public class TestController extends HttpServlet {
 	    		break;
 	    	case "/checkduplnick.do" :
 	    		handleCheckDuplNickDo(request, response);
+	    		break;
+	    	case "/sendcode.do" :
+	    		handleSendCodeDo(request, response);
+	    		break;
+	    	case "/checkemailcode.do" :
+	    		handleCheckEmailCodeDo(request, response);
 	    		break;
 	    	default : 
 	    		response.sendError(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
@@ -164,6 +179,73 @@ public class TestController extends HttpServlet {
 		result.put("status", b ? "ok" : "no");
 		
 		Gson gson = new Gson();
+		response.setContentType("application/json");
+		response.getWriter().write(gson.toJson(result));
+	}
+	
+	private void handleSendCodeDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 요청 바디(JSON) 읽기
+		String email = ServletUtil.readRequestBody(request);
+		
+		System.out.println("어 이메일 보낼준비중이여");
+		System.out.println(email);
+		
+		TestService service = TestService.getInstance();
+		
+		String code = service.sendCodeToThisEmail(email);
+		
+		if(code != null) {
+			String uuid = UUID.randomUUID().toString();
+			HttpSession session = request.getSession();
+			session.setAttribute("emailAuthToken", uuid);
+			service.storeThisToEmailTable(email, code, uuid);
+		}
+		
+		Map<String, String> result = new HashMap<>();
+		result.put("status", (code != null) ? "ok" : "no");
+		
+		Gson gson = new Gson();
+		response.setContentType("application/json");
+		response.getWriter().write(gson.toJson(result));
+	}
+	
+	private void handleCheckEmailCodeDo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 요청 바디(JSON) 읽기
+		String jsonStr = ServletUtil.readRequestBody(request);
+		
+		System.out.println("어 보낸 이메일이랑 코드랑 세션 확인하는중이여");
+		
+		System.out.println(jsonStr);
+		HttpSession session = request.getSession();
+		String authToken = (String) session.getAttribute("emailAuthToken");
+		
+		Map<String, String> result = new HashMap<>();
+		Gson gson = new GsonBuilder().registerTypeAdapter(LocalDate.class, new JsonDeserializer<LocalDate>() {
+	        public LocalDate deserialize(JsonElement json, java.lang.reflect.Type typeOfT, JsonDeserializationContext context) {
+	            return LocalDate.parse(json.getAsString());
+	        }
+	    })
+	    .create();
+		
+		if(authToken == null) {
+			result.put("status", "no-auth-token");
+		} else {
+			EmailAuthVO vo = gson.fromJson(jsonStr, EmailAuthVO.class);
+			vo.setAuthToken(authToken);
+			
+			TestService service = TestService.getInstance();
+			
+			boolean checkResult = service.checkThisEmailData(vo);
+			
+			if(checkResult) {
+				result.put("status", "ok");
+				session.removeAttribute("emailAuthToken");
+				session.setAttribute("verifiedEmail", vo.getEmail());
+			} else {
+				result.put("status", "not-found");
+			}
+		}
+		
 		response.setContentType("application/json");
 		response.getWriter().write(gson.toJson(result));
 	}
