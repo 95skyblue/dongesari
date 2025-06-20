@@ -1,12 +1,10 @@
 # Java class files
 *.class
 
-# Package files
-*.jar
-*.war
-*.ear
+# Log files
+*.log
 
-# IDE 설정 파일
+# IDE 설정 파일 (Eclipse)
 .classpath
 .project
 .settings/
@@ -16,10 +14,22 @@
 /bin/
 /target/
 
+# 압축/패키지 파일
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.nar
+
+# VM 오류 로그
+hs_err_pid*
+replay_pid*
+
 # OS 및 기타
 .DS_Store
 Thumbs.db
-*.log
 
 # 업로드된 사용자 파일 제외
 /webapp/upload/

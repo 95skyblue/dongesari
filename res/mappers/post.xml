@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "post">
+
+	<!-- 글쓰기  -->
+	<insert id="insertPost" parameterType="PostVO">
+		insert into POST (
+			post_id, mem_id, category_id, post_title, content, create_at, post_stat, version_now
+		)
+		values (
+			#{postId}, #{memId}, #{categoryId}, #{postTitle}, #{content}, SYSDATE, 'ACTIVE', 1
+		)	
+	</insert>
+	
+	
+	
+</mapper>
