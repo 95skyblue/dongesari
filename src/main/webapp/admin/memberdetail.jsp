@@ -58,7 +58,7 @@
   </table>
 
   <div class="mt-3">
-    <a href="<%=request.getContextPath()%>/admin/memberList.jsp" class="btn btn-secondary">뒤로가기</a>
+    <a href="<%=request.getContextPath()%>/admin/adminmemberlist.jsp" class="btn btn-secondary">뒤로가기</a>
   </div>
 </div>
 </body>

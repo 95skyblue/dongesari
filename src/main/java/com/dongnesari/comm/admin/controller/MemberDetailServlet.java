@@ -31,7 +31,8 @@ public class MemberDetailServlet extends HttpServlet {
     
     MemberVO vo = service.getMemberDetail(memId);
     
-    System.out.println("조회된 member: " + vo); // 이 로그에서 null이면 문제!
+    //회원 상세 불러올때 값 조회하기
+    System.out.println("조회된 member: " + vo); // 이 로그에서 null이면 문제! 
 
     request.setAttribute("member", vo);
     request.getRequestDispatcher("/admin/memberdetail.jsp").forward(request, response);
