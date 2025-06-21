@@ -12,10 +12,10 @@
     </settings>
 	
 	<typeAliases>
-		<package name="com.dongnesari.comm.test.vo"/>
 		<typeAlias alias="LoginDTO" type="com.dongnesari.comm.test.dto.LoginDTO"/> 
 		<typeAlias alias="SessionDTO" type="com.dongnesari.comm.test.dto.SessionDTO"/>
-		<typeAlias alias="PostVO" type="com.dongnesari.comm.board.vo.PostVO"/> 
+		<typeAlias alias="PostVO" type="com.dongnesari.comm.board.vo.PostVO"/>
+		<package name="com.dongnesari.comm.test.vo"/> 
     </typeAliases>
     
 	<environments default="oracle">

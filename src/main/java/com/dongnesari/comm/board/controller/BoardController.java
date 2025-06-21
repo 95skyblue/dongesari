@@ -1,15 +1,12 @@
 package com.dongnesari.comm.board.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.dongnesari.comm.board.service.IPostService;
 import com.dongnesari.comm.board.service.PostServiceImpl;
 import com.dongnesari.comm.board.vo.PostVO;
-import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
