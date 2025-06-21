@@ -1,8 +1,14 @@
 package com.dongnesari.comm.board.service;
 
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
 import com.dongnesari.comm.board.dao.IPostDAO;
 import com.dongnesari.comm.board.dao.PostDAOImpl;
 import com.dongnesari.comm.board.vo.PostVO;
+
+import config.MybatisUtil;
 
 public class PostServiceImpl implements IPostService {
 	
@@ -34,6 +40,12 @@ public class PostServiceImpl implements IPostService {
 	public PostVO getPostDetail(Integer postId) {
 		
 		return dao.getPostDetail(postId);
+	}
+
+	@Override
+	public List<PostVO> getAllPosts() {
+		
+		return dao.getAllPosts();
 	}
 
 }

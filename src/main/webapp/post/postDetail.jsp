@@ -13,6 +13,7 @@ body {
     padding: 20px;
 }
 .container {
+	position: relative; /* 추가한거 */ 
     max-width: 720px;
     margin: 0 auto;
     background: #fff;
@@ -41,11 +42,47 @@ body {
 .post-info div {
     margin-bottom: 5px;
 }
+
+/* 수정버튼 CSS */
+
+.button-box {
+    position: absolute;
+    top: 30px;
+    right: 50px;
+}
+
+.button-box form {
+    display: inline;
+    margin-left: 5px;
+}
+
+.button-box button {
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: #f1f1f1;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
 </style>
 </head>
 <body>
 <div class="container">
     <h1>게시글 상세보기</h1>
+    <div class="button-box">
+    	<form action="/dongnesari/board/write" method="get" style="display:inline">
+    		<input type="hidden" name="mode" value="edit" />
+    		<input type="hidden" name="postId" value="${post.postId}"/>
+    		<button type="submit">수정</button>
+    	</form>
+    	
+    	<form action="/dongnesari/board/delete" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제할까요?');">
+        <input type="hidden" name="postId" value="${post.postId}" />
+        <button type="submit">🗑 삭제</button>
+    	</form>
+    </div>
     
     <c:choose>
         <c:when test="${not empty post}">
@@ -59,7 +96,7 @@ body {
                     </c:choose>
                 </div>
                 <div><strong>작성일:</strong> ${post.createAt}</div>
-                <div><strong>카테고리 ID:</strong> ${post.categoryId}</div>
+                <div><strong>게시판 카테고리:</strong> ${post.categoryName}</div>
                 <div><strong>상태:</strong> ${post.postStat}</div>
             </div>
             

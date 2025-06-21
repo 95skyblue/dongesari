@@ -92,4 +92,18 @@ public class PostVO {
 		this.nickname = nickname;
 	}
 	
+	public String getCategoryName() {
+		switch (categoryId) {
+		case 1:
+			return "공지사항";
+		case 2:
+			return "시설물 신고";
+		case 3:
+			return "칭찬";
+		case 4:
+			return "동네생활";
+		default:
+			return "알 수 없음";
+		}
+	}
 }

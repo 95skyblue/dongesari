@@ -55,5 +55,22 @@
 	JOIN member m ON p."mem_id" = m."mem_id"
 	WHERE p."post_id" = #{postId}
 	</select>
+	
+	<select id="getAllPosts" resultMap="postMap">
+		SELECT
+			p."post_id",
+			p."post_title",
+			p."content",
+			p."mem_id",
+			m."nickname",
+			p."category_id",
+			p."create_at",
+			p."post_stat",
+			p."version_now"
+		FROM post p
+		JOIN member m ON p."mem_id" = m."mem_id"
+		WHERE p."post_stat" = 'ACTIVE'
+		ORDER BY p."post_id" DESC	
+	</select>
 
 </mapper>

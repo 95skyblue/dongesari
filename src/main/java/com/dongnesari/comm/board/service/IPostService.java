@@ -1,5 +1,7 @@
 package com.dongnesari.comm.board.service;
 
+import java.util.List;
+
 import com.dongnesari.comm.board.vo.PostVO;
 
 public interface IPostService {
@@ -10,4 +12,6 @@ public interface IPostService {
 	//글 상세 보기 postDetail
 	PostVO getPostDetail(Integer postId);
 
+	//글 리스트
+	List<PostVO> getAllPosts();
 }
