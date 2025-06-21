@@ -30,4 +30,10 @@ public class PostServiceImpl implements IPostService {
 		return dao.insertPost(vo);
 	}
 
+	@Override
+	public PostVO getPostDetail(Integer postId) {
+		
+		return dao.getPostDetail(postId);
+	}
+
 }

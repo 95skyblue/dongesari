@@ -16,6 +16,8 @@ public class PostVO {
 	private String postStat;         //글상태
 	private Integer versionNow;      //현재글버전
 	
+	private String nickname;         //닉네임
+	
 	public Integer getPostId() {
 		return postId;
 	}
@@ -82,6 +84,12 @@ public class PostVO {
 	}
 	public void setVersionNow(Integer versionNow) {
 		this.versionNow = versionNow;
-	}    
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
 	
 }

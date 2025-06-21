@@ -37,17 +37,21 @@ public class MybatisUtil {
 	 * @return SqlSession 객체
 	 */ 
 	public static SqlSession getInstance() {
-		
-		return sessionFactory.openSession();
-	}
-	
-	// 오토커밋
-	public static SqlSession getSqlSession(boolean autoCommit) {
-		return sessionFactory.openSession(autoCommit);
-	}
-	// 수동커밋
-	public static SqlSession getSqlSession() {
-        return getSqlSession(false);
+	    return sessionFactory.openSession();
 	}
 
+	// 오토커밋
+	public static SqlSession getSqlSession(boolean autoCommit) {
+	    return sessionFactory.openSession(autoCommit);
+	}
+
+	// 수동커밋
+	public static SqlSession getSqlSession() {
+	    return getSqlSession(false);
+	}
+
+	// SqlSessionFactory 리턴 (KJM 코드)
+	public static SqlSessionFactory getSqlSessionFactory() {
+	    return sessionFactory;
+	}
 }

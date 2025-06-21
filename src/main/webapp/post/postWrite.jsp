@@ -75,17 +75,9 @@
 
 <div class="container">
     <h2>📌 게시글 작성 (비동기)</h2>
-    <form id="postForm">
-        <label for="postTitle">제목</label>
-        <input type="text" id="postTitle" name="postTitle" required>
-
-        <label for="content">내용</label>
-        <textarea id="content" name="content" required></textarea>
-
-        <label for="memId">작성자 ID</label>
-        <input type="text" id="memId" name="memId" required>
-
-        <label for="categoryId">카테고리</label>
+    <form id="postForm" enctype="multipart/form-data">
+    	
+    	<label for="categoryId">카테고리</label>
         <select id="categoryId" name="categoryId" required>
             <option value="" disabled selected>카테고리를 선택하세요</option>
             <option value="1">공지사항</option>
@@ -93,6 +85,21 @@
             <option value="3">칭찬</option>
             <option value="4">동네생활</option>
         </select>
+    
+        <label for="postTitle">제목</label>
+        <input type="text" id="postTitle" name="postTitle" required>
+        
+        <label for="memId">작성자 ID</label>
+        <input type="text" id="memId" name="memId" required>
+        
+        <label for="upload">이미지 첨부</label>
+        <input type="file" id="upload" name="upload" accept="image/*" multiple><br><br>
+        
+        <!-- 미리보기 영역 -->
+        <div id="preview"></div>
+
+        <label for="content">내용</label>
+        <textarea id="content" name="content" required></textarea>
 
         <button type="button" id="write">등록하기</button>
         <div class="msg" id="msgBox"></div>
@@ -101,26 +108,62 @@
 
 <script>
 
+	let selectedFiles = [];
+
+	//미리보기
+	$('#upload').on('change', function(e){
+		const newFiles = Array.from(e.target.files);
+		selectedFiles = selectedFiles.concat(newFiles);
+		
+		$('#preview').empty(); //이전이미지 지우기
+		
+		selectedFiles.forEach(file => {
+			const reader = new FileReader();
+			reader.onload = function(event){
+				const img = $('<img>').attr('src', event.target.result).css({
+					width : '80px',
+					margin : '10px',
+					border : '1px solid #ccc'
+				});
+				$('#preview').append(img);
+			};
+			reader.readAsDataURL(file);
+		})
+		//input초기화
+		$('#upload').val('');
+	})
+		
 	
+	//전송 버튼 클릭시
     $('#write').on('click', function () {
+        const formData = new FormData();
         
-    	const data = {
-    			postTitle : $('#postTitle').val(),
-    			content : $('#content').val(),
-    			memId : $('#memId').val(),
-    			categoryId : parseInt($('#categoryId').val())
-    	}
+        formData.append('postTitle', $('#postTitle').val());
+        formData.append('content', $('#content').val());
+        formData.append('memId', $('#memId').val());
+        formData.append('categoryId', $('#categoryId').val());
+        
+		/* postTitle : $('#postTitle').val(),
+		content : $('#content').val(),
+		memId : $('#memId').val(),
+		categoryId : parseInt($('#categoryId').val()) */
+		
+		selectedFiles.forEach(file => {
+			formData.append('uploadFiles', file); // key값은 백엔드에서 처리할 필드명
+		})
     	
-    	console.log("보낼 데이터: " + JSON.stringify(data));
+    	//console.log("보낼 데이터: " + JSON.stringify(formData));
+		formData.forEach((value, key) => console.log(`${key} : ${value}`));
     	
     	$.ajax({
     		url : `<%=request.getContextPath() %>/board/write`,
-    		data : JSON.stringify(data),
+    		data : formData,
     		type : 'post',
-    		contentType : 'application/json;charset=utf-8',
+    		processData : false,
+    		contentType : false,
     		success : function(res){
     			console.log(res); // {result : "테스트 성공!"}
-    			$('#msgBox').text(res.result);
+    			$('#msgBox').text('게시글 등록 완료!');
     		},
     		error : function(xhr){
     			alert("오류 " + xhr.status + " - " + xhr.statusText);

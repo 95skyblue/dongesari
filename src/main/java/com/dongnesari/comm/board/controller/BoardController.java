@@ -10,11 +10,13 @@ import com.dongnesari.comm.board.vo.PostVO;
 import com.google.gson.Gson;
 
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+@MultipartConfig
 @WebServlet("/board/*")
 public class BoardController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,17 +29,43 @@ public class BoardController extends HttpServlet {
 				break;
 			case "/write":
 //				handleWrite(request, response);
+			case "/detail":
+				handleDetail(request, response);
 				break;
 			default:
 				response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		}
 	}
 
+	//글 상세보기
+	private void handleDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		//디버깅로그
+		System.out.println("postId 파라미터: " + request.getParameter("postId"));
+
+		
+		//파라미터로 글 번호 받아오기
+		Integer postId = Integer.parseInt(request.getParameter("postId"));
+		
+		//서비스 호출
+		IPostService service = PostServiceImpl.getService();
+		PostVO vo = service.getPostDetail(postId);
+		
+		//객체 null 확인용 로그
+		System.out.println("post 객체 확인 : " + vo);
+		
+		//jsp에 전달
+		request.setAttribute("post", vo);
+		
+		//상세보기 페이지로 이동
+		request.getRequestDispatcher("/post/postDetail.jsp").forward(request, response);
+		
+	}
+
 	private void handleMain(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/WEB-INF/views/board/boardMain.jsp").forward(request, response);
 	}
 
-	
+	//글쓰기
 	private void handleWrite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		/*
@@ -46,8 +74,42 @@ public class BoardController extends HttpServlet {
 		 * request, response);
 		 */
 		
-		
-		
+		request.setCharacterEncoding("UTF-8");
+	    response.setContentType("application/json;charset=UTF-8");
+
+	    // 텍스트 파라미터
+	    String postTitle = request.getParameter("postTitle");
+	    String content = request.getParameter("content");
+	    String memId = request.getParameter("memId");
+	    int categoryId = Integer.parseInt(request.getParameter("categoryId"));
+
+	    System.out.println("제목: " + postTitle);
+	    System.out.println("내용: " + content);
+	    System.out.println("작성자: " + memId);
+	    System.out.println("카테고리: " + categoryId);
+
+	    // VO에 담기
+	    PostVO vo = new PostVO();
+	    vo.setPostTitle(postTitle);
+	    vo.setContent(content);
+	    vo.setMemId(memId);
+	    vo.setCategoryId(categoryId);
+
+	    // service 호출
+	    IPostService service = PostServiceImpl.getService();
+	    int result = service.insertPost(vo);
+
+	    System.out.println("insert 결과: " + result);
+
+	    // JSON 응답
+	    PrintWriter out = response.getWriter();
+	    if (result > 0) {
+	        out.print("{\"result\":\"글 등록 성공!\"}");
+	    } else {
+	        out.print("{\"result\":\"글 등록 실패ㅠㅠ\"}");
+	    }
+	    out.flush();
+	
 	}
 	
 	
@@ -57,28 +119,11 @@ public class BoardController extends HttpServlet {
 		 String action = request.getPathInfo();
 		 
 		 if("/write".equals(action)) {
-			 request.setCharacterEncoding("UTF-8");
-			 response.setContentType("application/json;charset=UTF-8");
-			 
-			 BufferedReader reader = request.getReader();
-			 Gson gson = new Gson();
-			 
-			 PostVO vo = gson.fromJson(reader, PostVO.class); // JSON -> VO객체
-			 
-			 //테스트용 로그 찍기
-			 System.out.println("title: " + vo.getPostTitle());
-	         System.out.println("memId: " + vo.getMemId());
-	         System.out.println("categoryId: " + vo.getCategoryId());
-	         System.out.println("content: " + vo.getContent());
-	         
-	         //DB작업 없이 그냥 응답만 보내기
-	         PrintWriter out = response.getWriter();
-	         out.print("{\"result\":\"테스트 성공!\"}");
-	         out.flush();
-			 
+			 handleWrite(request,response);
+
+		 }else {
+			 response.sendError(HttpServletResponse.SC_NOT_FOUND);
 		 }
 	}
-	
-	
-	
+
 }
