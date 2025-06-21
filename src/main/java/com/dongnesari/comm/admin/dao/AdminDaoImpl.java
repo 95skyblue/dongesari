@@ -151,8 +151,25 @@ public class AdminDaoImpl implements IAdminDao {
 	 * 관리자 삭제
 	 */
 	@Override
-	public int deleteAdmin(String adm_id) {
-		throw new UnsupportedOperationException("Not implemented yet");
+	public int deleteAdmin(String admId) {
+		SqlSession   session = MybatisUtil.getInstance();
+		
+		int res = 0;
+		
+		try {
+			
+			res  = session.delete("admin.deleteAdmin",admId);
+			
+		} catch (Exception e) {
+			  e.printStackTrace();// TODO: handle exception
+		}finally {
+			if(session != null) {
+				
+				session.commit();
+				session.close();
+			}
+		}
+		
+		return res;	
 	}
-
 }

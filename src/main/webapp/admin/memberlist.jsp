@@ -96,23 +96,6 @@
 	  </div>
 	</div>
 		  
-  <!-- 
-  <form id="searchForm" class="row g-3 mb-4">
-    <div class="col-md-4">
-      <input type="text" class="form-control" name="keyword" placeholder="이름 또는 ID 검색">
-    </div>
-    <div class="col-md-2">
-      <select class="form-select" name="memberType">
-        <option value="전체">전체</option>
-        <option value="일반">일반</option>
-        <option value="관리자">관리자</option>
-      </select>
-    </div>
-    <div class="col-md-2">
-      <button type="submit" class="btn btn-primary">검색</button>
-    </div>
-  </form>
- -->
 
 
   <!-- 회원 조회 리스트 -->

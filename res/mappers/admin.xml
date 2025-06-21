@@ -9,6 +9,13 @@
 	    SELECT * FROM ADMIN
 	</select>
 	
+	<!-- 관리자 한 명 상세 조회 -->
+	<select id="getAdminById" parameterType="string" resultType="adminVO">
+		SELECT * FROM ADMIN WHERE "adm_login_id" = #{admId}
+	 
+	</select>
+	
+	
 	<!-- 관리자 추가 -->
 	<insert id="insertAdmin" parameterType="adminVO">
 	  <selectKey keyProperty="admId" resultType="String" order="BEFORE">
@@ -29,6 +36,11 @@
 	    #{rsdntNum}
 	  )
 	</insert>
+	
+	<!-- 관리자 삭제 -->
+	<delete id="deleteAdmin" parameterType="string">
+		DELETE FROM ADMIN WHERE "adm_id" = #{admId}
+	</delete>
 	
 	
 </mapper>

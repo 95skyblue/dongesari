@@ -25,10 +25,10 @@ $('#searchForm').on('submit', function (e) {
 // 회원 관리 버튼 클릭 이벤트
 // 회원 리스트에서 관리 버튼을 눌렀을때 회원 상세 페이지로 이동하는 경로  
 $(document).on('click', '.manage-btn', function () {
-  const memId = $(this).data('id');
-  console.log("넘어가는 memId:", memId); // 잘 나오는지 콘솔 확인
-  alert(memId + '번 회원 관리 기능 실행!');
-  location.href = mypath + "/AdminDetailServlet.do?memId=" + memId; // 이동경로 설정
+  const admId = $(this).data('id');
+  console.log("넘어가는 memId:", admId); // 잘 나오는지 콘솔 확인
+  alert(admId + '번 회원 관리 기능 실행!');
+  location.href = mypath + "/AdminDetailServlet.do?admId=" + admId; // 이동경로 설정
 });
 
 
