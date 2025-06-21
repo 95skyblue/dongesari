@@ -79,5 +79,13 @@
 		DELETE FROM post
 		WHERE "post_id" = ${postId}
 	</delete>
+	
+	<update id="updatePost">
+		UPDATE post
+		SET "post_title" = #{postTitle},
+			"content" = #{content},
+			"category_id" = #{categoryId},
+		WHERE "post_id" = #{postId}
+	</update>
 
 </mapper>

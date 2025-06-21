@@ -33,7 +33,7 @@ public class PostServiceImpl implements IPostService {
 	 * 글 쓰기
 	 */
 	@Override
-	public int insertPost(PostVO vo) { //vo에 게시글 제목, 내용, 작성자등 정보가 담김
+	public Integer insertPost(PostVO vo) { //vo에 게시글 제목, 내용, 작성자등 정보가 담김
 		
 		//insert성공하면 1, 실패 0
 		return dao.insertPost(vo);
@@ -64,6 +64,15 @@ public class PostServiceImpl implements IPostService {
 	public Integer deletePost(Integer postId) {
 		
 		return dao.deletePost(postId);
+	}
+
+	/**
+	 * 글 수정
+	 */
+	@Override
+	public Integer updatePost(PostVO vo) {
+		
+		return dao.updatePost(vo);
 	}
 
 }

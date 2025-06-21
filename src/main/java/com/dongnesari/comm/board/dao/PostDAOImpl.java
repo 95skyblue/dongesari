@@ -26,7 +26,7 @@ public class PostDAOImpl implements IPostDAO {
 	 * 글 작성
 	 */
 	@Override
-	public int insertPost(PostVO vo) {
+	public Integer insertPost(PostVO vo) {
 		try(SqlSession session = factory.openSession()){
 			int res = session.insert("post.insertPost", vo);
 			session.commit(); // insert는 commit 필요
@@ -70,6 +70,21 @@ public class PostDAOImpl implements IPostDAO {
 	public Integer deletePost(Integer postId) {
 		try(SqlSession session = factory.openSession()){
 			int res = session.delete("post.deletePost",postId);
+			session.commit();
+			return res;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return 0;
+	}
+
+	/**
+	 * 글 수정
+	 */
+	@Override
+	public Integer updatePost(PostVO vo) {
+		try(SqlSession session = factory.openSession()) {
+			int res = session.update("post.updatePost", vo);
 			session.commit();
 			return res;
 		}catch(Exception ex) {
