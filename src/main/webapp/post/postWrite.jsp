@@ -163,7 +163,14 @@
     		contentType : false,
     		success : function(res){
     			console.log(res); // {result : "테스트 성공!"}
-    			$('#msgBox').text('게시글 등록 완료!');
+    			
+    			if(res.result.includes("성공")){
+    				alert(res.result); //등록 성공 메시지
+    				location.href = "<%=request.getContextPath()%>/board/main";
+    			}else{
+    				$('#msgBox').text('게시글 등록 실패');
+    				
+    			}
     		},
     		error : function(xhr){
     			alert("오류 " + xhr.status + " - " + xhr.statusText);

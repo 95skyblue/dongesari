@@ -34,6 +34,8 @@ public class BoardController extends HttpServlet {
 		        handleMain(request, response);  // 같은 로직 사용
 		        break;	
 			case "/write":
+				request.getRequestDispatcher("/post/postWrite.jsp").forward(request, response);
+				break;
 //				handleWrite(request, response);
 			case "/detail":
 				handleDetail(request, response);
