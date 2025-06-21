@@ -1,16 +1,17 @@
-# Compiled class file
+# 컴파일된 클래스 파일
 *.class
 
-# Log file
+# 로그 파일
 *.log
 
-# BlueJ files
+# BlueJ files 블루제이가 뭐임?
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
+# Mobile Tools for Java (J2ME) 이건또뭔데.
 .mtj.tmp/
 
-# Package Files #
+# Package Files # 이러면 라이브러리들 나가린데... 그렇다고 올리기도 뭐함.
+# Maven 쓰면 좋은데.
 *.jar
 *.war
 *.nar
@@ -24,4 +25,4 @@ hs_err_pid*
 replay_pid*
 
 # 이메일 비밀번호 프로퍼티 파일 무시
-res/properties/emailSender.properties
+src/res/properties/emailSender.properties
