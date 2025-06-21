@@ -28,15 +28,15 @@
 	</insert>
 	
 	<resultMap id="postMap" type="PostVO">
-	    <result column="&quot;post_id&quot;" property="postId"/>
-	    <result column="&quot;post_title&quot;" property="postTitle"/>
-	    <result column="&quot;content&quot;" property="content"/>
-	    <result column="&quot;mem_id&quot;" property="memId"/>
-	    <result column="&quot;nickname&quot;" property="nickname"/>
-	    <result column="&quot;category_id&quot;" property="categoryId"/>
-	    <result column="&quot;create_at&quot;" property="createAt"/>
-	    <result column="&quot;post_stat&quot;" property="postStat"/>
-	    <result column="&quot;version_now&quot;" property="versionNow"/>
+	    <result column="post_id" property="postId"/>
+	    <result column="post_title" property="postTitle"/>
+	    <result column="content" property="content"/>
+	    <result column="mem_id" property="memId"/>
+	    <result column="nickname" property="nickname"/>
+	    <result column="category_id" property="categoryId"/>
+	    <result column="create_at" property="createAt"/>
+	    <result column="post_stat" property="postStat"/>
+	    <result column="version_now" property="versionNow"/>
 	</resultMap>
 	
 	<!-- 글 상세 -->

@@ -3,110 +3,83 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>게시글 상세</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 720px;
-            margin: 40px auto;
-            background: #fff;
-            padding: 30px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 12px;
-        }
-        .profile {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-        .nickname {
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .post-title {
-            font-size: 1.4rem;
-            font-weight: bold;
-            margin: 15px 0 10px;
-        }
-        .content {
-            font-size: 1rem;
-            white-space: pre-wrap;
-            margin-bottom: 20px;
-        }
-        .images img {
-            max-width: 100%;
-            margin: 10px 0;
-            border-radius: 8px;
-        }
-        .actions {
-            display: flex;
-            gap: 20px;
-            margin: 15px 0;
-            font-size: 0.95rem;
-            color: #666;
-        }
-        .comments {
-            border-top: 1px solid #ddd;
-            margin-top: 20px;
-            padding-top: 20px;
-        }
-        .comment {
-            margin-bottom: 15px;
-        }
-        .comment .nickname {
-            font-weight: bold;
-            margin-right: 8px;
-        }
-        .comment .text {
-            display: inline;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>게시글 상세</title>
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 12px;
+}
+.post-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+.post-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    white-space: pre-wrap;
+}
+.post-info {
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.post-info div {
+    margin-bottom: 5px;
+}
+</style>
 </head>
 <body>
 <div class="container">
-
-	<div class="profile">
-        <img src="/images/default-profile.png" alt="프로필">
-        <div class="nickname">${post.nickname}</div>
-    </div>
-
-    <div class="post-title">${post.postTitle}</div>
-
-    <div class="content">${post.content}</div>
-
-    <div class="images">
-        <c:forEach var="pic" items="${post.pictures}">
-            <img src="/upload/${pic.picDir}" alt="첨부 이미지">
-        </c:forEach>
-    </div>
-
-    <div class="actions">
-        <div>👍 좋아요 ${post.likeCount}</div>
-        <div>💬 댓글 ${post.commentCount}</div>
-        <div>👁 조회수 ${post.viewCount}</div>
-    </div>
-
-    <div class="comments">
-        <c:forEach var="reply" items="${post.comments}">
-            <div class="comment">
-                <span class="nickname">${reply.nickname}</span>
-                <span class="text">${reply.content}</span>
+    <h1>게시글 상세보기</h1>
+    
+    <c:choose>
+        <c:when test="${not empty post}">
+            <div class="post-title">${post.postTitle}</div>
+            
+            <div class="post-info">
+                <div><strong>작성자:</strong> 
+                    <c:choose>
+                        <c:when test="${not empty post.nickname}">${post.nickname}</c:when>
+                        <c:otherwise>${post.memId}</c:otherwise>
+                    </c:choose>
+                </div>
+                <div><strong>작성일:</strong> ${post.createAt}</div>
+                <div><strong>카테고리 ID:</strong> ${post.categoryId}</div>
+                <div><strong>상태:</strong> ${post.postStat}</div>
             </div>
-        </c:forEach>
-    </div>
-
+            
+            <div class="post-content">${post.content}</div>
+            
+            <!-- 디버깅 정보 -->
+            <div style="border-top: 1px solid #ddd; padding-top: 20px; margin-top: 20px; font-size: 0.9rem; color: #666;">
+                <strong>디버깅 정보:</strong><br>
+                Post ID: ${post.postId}<br>
+                Member ID: ${post.memId}<br>
+                Version: ${post.versionNow}
+            </div>
+            
+        </c:when>
+        <c:otherwise>
+            <div style="color: red; font-weight: bold; text-align: center; padding: 50px;">
+                게시글을 찾을 수 없습니다.
+            </div>
+        </c:otherwise>
+    </c:choose>
 </div>
 </body>
 </html>
