@@ -14,4 +14,8 @@ public interface IPostService {
 
 	//글 리스트
 	List<PostVO> getAllPosts();
+	
+	//글 삭제
+	public Integer deletePost(Integer postId);
+	
 }

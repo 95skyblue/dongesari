@@ -56,6 +56,7 @@
 	WHERE p."post_id" = #{postId}
 	</select>
 	
+	<!-- 글 리스트 -->
 	<select id="getAllPosts" resultMap="postMap">
 		SELECT
 			p."post_id",
@@ -72,5 +73,11 @@
 		WHERE p."post_stat" = 'ACTIVE'
 		ORDER BY p."post_id" DESC	
 	</select>
+	
+	<!-- 글 삭제 -->
+	<delete id="deletePost" parameterType="Integer">
+		DELETE FROM post
+		WHERE "post_id" = ${postId}
+	</delete>
 
 </mapper>

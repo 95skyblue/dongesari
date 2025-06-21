@@ -29,6 +29,9 @@ public class PostServiceImpl implements IPostService {
 		dao = PostDAOImpl.getDao();
 	}
 	
+	/**
+	 * 글 쓰기
+	 */
 	@Override
 	public int insertPost(PostVO vo) { //vo에 게시글 제목, 내용, 작성자등 정보가 담김
 		
@@ -36,16 +39,31 @@ public class PostServiceImpl implements IPostService {
 		return dao.insertPost(vo);
 	}
 
+	/**
+	 * 글 상세보기
+	 */
 	@Override
 	public PostVO getPostDetail(Integer postId) {
 		
 		return dao.getPostDetail(postId);
 	}
 
+	/**
+	 * 글 리스트
+	 */
 	@Override
 	public List<PostVO> getAllPosts() {
 		
 		return dao.getAllPosts();
+	}
+
+	/**
+	 * 글 삭제
+	 */
+	@Override
+	public Integer deletePost(Integer postId) {
+		
+		return dao.deletePost(postId);
 	}
 
 }

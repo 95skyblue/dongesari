@@ -46,12 +46,26 @@ public class BoardController extends HttpServlet {
 	}
 	
 	//글 삭제하기
-	private void handleDelete(HttpServletRequest request, HttpServletResponse response) {
+	private void handleDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		//파라미터로 글 번호 받아오기
 		Integer postId = Integer.parseInt(request.getParameter("postId"));
 		
+		System.out.println("삭제할 postId: " + postId); // 이 로그가 나오나요?
+		
 		//서비스 호출
 		IPostService service = PostServiceImpl.getService();
+		int result = service.deletePost(postId);
+		
+		System.out.println("삭제 결과: " + result); // 이 값이 0인지 1인지 확인!
+		
+		if(result > 0) {
+			//삭제 성공시 목록으로 리다이렉트
+			response.sendRedirect(request.getContextPath() +  "/board/main");
+			
+		}else {
+			//삭제 실패 처리
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}
 		
 	}
 	

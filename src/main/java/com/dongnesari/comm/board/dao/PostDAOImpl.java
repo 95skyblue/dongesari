@@ -22,6 +22,9 @@ public class PostDAOImpl implements IPostDAO {
 		factory = MybatisUtil.getSqlSessionFactory();
 	}
 	
+	/**
+	 * 글 작성
+	 */
 	@Override
 	public int insertPost(PostVO vo) {
 		try(SqlSession session = factory.openSession()){
@@ -58,5 +61,20 @@ public class PostDAOImpl implements IPostDAO {
 			ex.printStackTrace();
 			return new ArrayList<>(); // 예외 발생시 빈 리스트 반환
 		}
+	}
+
+	/**
+	 * 글 삭제
+	 */
+	@Override
+	public Integer deletePost(Integer postId) {
+		try(SqlSession session = factory.openSession()){
+			int res = session.delete("post.deletePost",postId);
+			session.commit();
+			return res;
+		}catch(Exception ex) {
+			ex.printStackTrace();
+		}
+		return 0;
 	}
 }
