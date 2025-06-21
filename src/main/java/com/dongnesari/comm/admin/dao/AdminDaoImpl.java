@@ -55,12 +55,12 @@ public class AdminDaoImpl implements IAdminDao {
 	 * 관리자 상세 조회 (ID)로
 	 */
 	@Override
-	public AdminVO getAdminById(String adm_id) {
+	public AdminVO getAdminById(String admId) {
 		AdminVO mv = null;
 		
 		try (SqlSession session = MybatisUtil.getInstance();) {
 			
-			mv = session.selectOne("admin.getAdminById", adm_id);
+			mv = session.selectOne("admin.getAdminById", admId);
 			
 		}catch(PersistenceException ex) {
 			ex.printStackTrace();

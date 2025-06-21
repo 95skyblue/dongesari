@@ -32,9 +32,9 @@ public class AdminServiceImpl implements IAdminService{
 	}
 
 	@Override
-	public AdminVO getAdminById(String adm_id) {
+	public AdminVO getAdminById(String admId) {
 		// TODO Auto-generated method stub
-		return dao.getAdminById(adm_id);
+		return dao.getAdminById(admId);
 	}
 
 	@Override
@@ -56,9 +56,9 @@ public class AdminServiceImpl implements IAdminService{
 	}
 
 	@Override
-	public int deleteAdmin(String adm_id) {
+	public int deleteAdmin(String admId) {
 		// TODO Auto-generated method stub
-		return dao.deleteAdmin(adm_id);
+		return dao.deleteAdmin(admId);
 	}
 
 }

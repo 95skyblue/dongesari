@@ -24,13 +24,10 @@
 
   <!-- 검색 영역 -->
   
-  <!-- 검색 필터 영역 -->
 	<!-- 검색 필터 영역 -->
 	<div class="card mb-4">
 	  <div class="card-body">
 	    <form id="searchForm" class="row g-3 align-items-end">
-	
-	
 		  
 	      <!-- 가입일 직접 입력 -->
 	      <div class="col-md-2">

@@ -10,7 +10,7 @@ public interface IAdminService {
     public List<AdminVO> getAllAdmins();
 
     // 관리자 상세 조회 (ID로)
-    public AdminVO getAdminById(String adm_id);
+    public AdminVO getAdminById(String admId);
 
     // 관리자 로그인 (Login ID + Password)
     public AdminVO loginAdmin(AdminVO vo);
@@ -22,5 +22,5 @@ public interface IAdminService {
     public String checkLoginId(String loginId);
 
     // 관리자 삭제
-    public int deleteAdmin(String adm_id);
+    public int deleteAdmin(String admId);
 }
