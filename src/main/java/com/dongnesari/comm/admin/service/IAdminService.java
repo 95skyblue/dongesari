@@ -1,6 +1,7 @@
 package com.dongnesari.comm.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.dongnesari.comm.admin.vo.AdminVO;
 
@@ -23,4 +24,12 @@ public interface IAdminService {
 
     // 관리자 삭제
     public int deleteAdmin(String admId);
+    
+    // 페이지 네이션 (구현 실패)
+    List<AdminVO> getAdminsByPage(Map<String, Integer> map);
+    int getAdminCount();
+
+    // 관리자수정
+	public int updateAdmin(AdminVO vo);
+    
 }

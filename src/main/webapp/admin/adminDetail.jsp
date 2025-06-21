@@ -59,12 +59,14 @@
   
 
   <div class="mt-4 d-flex justify-content-between">
-  <a href="<%=request.getContextPath()%>/admin/adminlist.jsp" class="btn btn-secondary">목록으로</a>
+  <a href="<%=request.getContextPath()%>/admin/adminList.jsp" class="btn btn-secondary">목록으로</a>
 
   <div>
-    <a href="<%=request.getContextPath()%>/admin/adminEdit.jsp?admId=<%= admin.getAdmId() %>" class="btn btn-warning me-2">수정</a>
+  	<!-- 관리자 수정 버튼(아직 안만듬)  -->
+    <a href="<%=request.getContextPath()%>/admin/AdminUpdateForm.jsp?admId=<%= admin.getAdmId() %>" class="btn btn-warning me-2">수정</a>
     
-    <form action="<%=request.getContextPath()%>/AdminDeleteServlet.do" method="post" style="display:inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+    <!-- 관리자 삭제 버튼(문구 수정가능) -->
+    <form action="<%=request.getContextPath()%>/AdminDeleteServlet.do" method="post" style="display:inline;" onsubmit="return confirm('삭제 된 아이디는 복구 할 수 없습니다.\n정말 삭제하시겠습니까?');">
       <input type="hidden" name="admId" value="<%= admin.getAdmId() %>">
       <button type="submit" class="btn btn-danger">삭제</button>
     </form>

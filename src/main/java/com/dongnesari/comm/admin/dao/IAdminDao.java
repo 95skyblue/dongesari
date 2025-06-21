@@ -1,6 +1,7 @@
 package com.dongnesari.comm.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.dongnesari.comm.admin.vo.AdminVO;
 
@@ -23,4 +24,10 @@ public interface IAdminDao {
 
     // 관리자 삭제
     public int deleteAdmin(String admId);
+    
+    // 페이지 네이션 (구현안됨)
+    List<AdminVO> getAdminsByPage(Map<String, Integer> map); // 페이지별 목록
+    int getAdminCount(); // 전체 개수
+    
+    int updateAdmin(AdminVO vo);
 }

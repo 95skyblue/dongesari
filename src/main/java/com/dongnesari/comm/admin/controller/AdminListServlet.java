@@ -54,6 +54,7 @@ public class AdminListServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 	    SqlSession sql = MybatisUtil.getInstance();
 	    List<AdminVO> adminList  = sql.selectList("admin.getAllAdmins");
 	    System.out.println("adminList: " + adminList);

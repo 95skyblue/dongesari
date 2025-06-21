@@ -1,6 +1,7 @@
 package com.dongnesari.comm.admin.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.dongnesari.comm.admin.dao.AdminDaoImpl;
 import com.dongnesari.comm.admin.dao.IAdminDao;
@@ -59,6 +60,23 @@ public class AdminServiceImpl implements IAdminService{
 	public int deleteAdmin(String admId) {
 		// TODO Auto-generated method stub
 		return dao.deleteAdmin(admId);
+	}
+	
+	
+	// 페이지네이션 구현 (실패)
+	@Override
+	public List<AdminVO> getAdminsByPage(Map<String, Integer> map) {
+	    return dao.getAdminsByPage(map);
+	}
+
+	@Override
+	public int getAdminCount() {
+	    return dao.getAdminCount();
+	}
+
+	@Override
+	public int updateAdmin(AdminVO vo) {
+	    return dao.updateAdmin(vo);
 	}
 
 }

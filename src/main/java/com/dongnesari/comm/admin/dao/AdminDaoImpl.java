@@ -1,6 +1,7 @@
 package com.dongnesari.comm.admin.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSession;
@@ -172,4 +173,52 @@ public class AdminDaoImpl implements IAdminDao {
 		
 		return res;	
 	}
+	
+	
+	
+	/**
+	 * 페이지네이션 (구현실패함)
+	 */
+	@Override
+	public List<AdminVO> getAdminsByPage(Map<String, Integer> map) {
+	    SqlSession session = MybatisUtil.getInstance();
+	    List<AdminVO> list = null;
+	    try {
+	        list = session.selectList("admin.getAdminsByPage", map);
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        session.close();
+	    }
+	    return list;
+	}
+
+	@Override
+	public int getAdminCount() {
+	    SqlSession session = MybatisUtil.getInstance();
+	    int cnt = 0;
+	    try {
+	        cnt = session.selectOne("admin.getAdminCount");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        session.close();
+	    }
+	    return cnt;
+	}
+	
+	@Override
+	public int updateAdmin(AdminVO vo) {
+	    SqlSession session = MybatisUtil.getInstance();
+	    int res = 0;
+	    try {
+	        res = session.update("admin.updateAdmin", vo);
+	        session.commit();
+	    } finally {
+	        session.close();
+	    }
+	    return res;
+	}
+
+
 }

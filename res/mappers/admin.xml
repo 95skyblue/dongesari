@@ -43,4 +43,28 @@
 	</delete>
 	
 	
+	
+	
+	<!-- 실패 -->
+	<!-- 관리자 페이징 목록 조회 -->
+	<select id="getAdminsByPage" parameterType="map" resultType="adminVO">
+	  SELECT * FROM (
+	    SELECT ROWNUM AS rnum, A.* FROM (
+	      SELECT * FROM admin ORDER BY adm_id
+	    ) A
+	    <![CDATA[
+	      WHERE ROWNUM <= #{end}
+	    ]]>
+	  )
+	  <![CDATA[
+	    WHERE rnum >= #{start}
+	  ]]>
+	</select>
+	
+	<!-- 관리자 수 조회 -->
+	<select id="getAdminCount" resultType="int">
+	  SELECT COUNT(*) FROM admin
+	</select>
+	
+	
 </mapper>
