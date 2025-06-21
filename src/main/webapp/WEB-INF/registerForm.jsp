@@ -129,7 +129,7 @@
 				<div id="email-msg" class="form-text">이메일 주소를 입력하세요.</div>
 			</div>
 		</div>
-		
+		 
 		<!-- 이메일 인증 -->
 		<div class="row align-items-center mt-2 collapse" id="veri-code-container">
 			<label for="veri-code" class="col-form-label col-2">인증코드</label>

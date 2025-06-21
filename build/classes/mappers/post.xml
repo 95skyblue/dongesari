@@ -2,6 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace = "post">
+
+	<!-- 글쓰기  -->
+	<insert id="insertPost" parameterType="PostVO">
+		insert into POST (
+			"post_id",
+			"mem_id",
+			"category_id",
+			"post_title",
+			"content",
+			"create_at",
+			"post_stat",
+			"version_now"
+		)
+		values (
+			post_seq.nextval,
+			#{memId},
+			#{categoryId},
+			#{postTitle},
+			#{content},
+			SYSDATE,
+			'ACTIVE',
+			1
+		)	
+	</insert>
 	
+	<resultMap id="postMap" type="PostVO">
+	    <result column="post_id" property="postId"/>
+	    <result column="post_title" property="postTitle"/>
+	    <result column="content" property="content"/>
+	    <result column="mem_id" property="memId"/>
+	    <result column="nickname" property="nickname"/>
+	    <result column="category_id" property="categoryId"/>
+	    <result column="create_at" property="createAt"/>
+	    <result column="post_stat" property="postStat"/>
+	    <result column="version_now" property="versionNow"/>
+	</resultMap>
 	
+	<!-- 글 상세 -->
+	<select id="postDetail" resultMap="postMap" parameterType="Integer">
+	SELECT
+		p."post_id",
+		p."post_title",
+		p."content",
+		p."mem_id",
+		m."nickname",
+		p."category_id",
+		p."create_at",
+		p."post_stat",
+		p."version_now"
+	FROM post p
+	JOIN member m ON p."mem_id" = m."mem_id"
+	WHERE p."post_id" = #{postId}
+	</select>
+	
+	<select id="getAllPosts" resultMap="postMap">
+		SELECT
+			p."post_id",
+			p."post_title",
+			p."content",
+			p."mem_id",
+			m."nickname",
+			p."category_id",
+			p."create_at",
+			p."post_stat",
+			p."version_now"
+		FROM post p
+		JOIN member m ON p."mem_id" = m."mem_id"
+		WHERE p."post_stat" = 'ACTIVE'
+		ORDER BY p."post_id" DESC	
+	</select>
+
 </mapper>
