@@ -65,6 +65,28 @@ body {
             
             <div class="post-content">${post.content}</div>
             
+             <!-- 좋아요 기능 시작 -->
+            <div id="likeArea" style="text-align: center; margin-top: 20px;">
+            	<!-- 게시글 번호를 숨겨서 자바스크립트로 넘길때 사용 -->
+                <input type="hidden" id="postId" value="${post.postId}" />
+                
+                <!-- 좋아요 버튼: 로그인한 사용자가 좋아요를 눌렀는지 여부에 따라 표시 변경 -->
+                <button type="button" id="likeBtn">
+                    <c:choose>
+                        <c:when test="${post.likedByMe}">
+                            ❤️ 좋아요 취소
+                        </c:when>
+                        <c:otherwise>
+                            🤍 좋아요
+                        </c:otherwise>
+                    </c:choose>
+                </button>
+                <div style="font-size: 0.9rem; margin-top: 5px;">
+                    <span id="likeCount">${post.likeCount}</span>명이 좋아요
+                </div>
+            </div>
+            <!-- 좋아요 기능 끝 -->
+            
             <!-- 디버깅 정보 -->
             <div style="border-top: 1px solid #ddd; padding-top: 20px; margin-top: 20px; font-size: 0.9rem; color: #666;">
                 <strong>디버깅 정보:</strong><br>
@@ -81,5 +103,43 @@ body {
         </c:otherwise>
     </c:choose>
 </div>
+
+<!--  좋아요 Ajax 스크립트 -->
+<script>
+// 좋아요 버튼 클릭 시 서버로 비동기 요청
+document.getElementById("likBtn")?.addEventListener("click", function(){
+	const postId = document.getElementById("postId").value;
+	
+	fetch("/like", {
+		method: "POST",
+		headers:{
+			"Content-Type" : "application/json"
+		},
+		body: JSON.stringify({postId: postId})	// 게시글 번호만 서버로 전달
+	})
+	.then(res => res.json())
+	.then(data => {
+		const btn = document.getElementById("likeBtn");
+		const count = document.getElementById("likeCount");
+		
+		// 서버 응답에 따라 버튼 텍스트 및 좋아요 수 업데이트
+		if (data.liked){
+			btn.innerText = "❤️ 좋아요 취소";
+		} else{
+			btn.innerText = "🤍 좋아요";
+		}
+		count.innerText = data.likeCount;
+	});
+});
+</script>
+
+<!--  ! 비로그인 사용자는 버튼 비활성화 처리 -->
+<c:if test="${empty sessionScope.loginUser}">
+<script>
+    document.getElementById("likeBtn").disabled = true;
+    document.getElementById("likeBtn").innerText = "로그인 후 이용 가능";
+</script>
+</c:if>
+
 </body>
 </html>

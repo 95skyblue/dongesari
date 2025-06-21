@@ -5,6 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.BufferedReader;
 import java.io.IOException;
 
 import org.apache.ibatis.session.SqlSession;
@@ -37,14 +39,19 @@ public class PostLikeController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 1. 요청 파라미터 추출 (post_id, mem_id)
-		int postId = Integer.parseInt(request.getParameter("post_id"));
-		int memId = Integer.parseInt(request.getParameter("mem_id"));
+		/*	기존 파라미터형식은 파싱이 필요함 코드 삭제 예정
+		 * // 1. 요청 파라미터 추출 (post_id, mem_id) int postId =
+		 * Integer.parseInt(request.getParameter("post_id")); int memId =
+		 * Integer.parseInt(request.getParameter("mem_id"));
+		 */
 		
-		// 2. DTO 생성
-		PostLikeDTO dto = new PostLikeDTO();	// 객체 생성
-		dto.setPostId(postId);					// postId 설정
-		dto.setMemId(memId);					// memId 설정
+		BufferedReader br = request.getReader();
+		Gson gson = new Gson();
+		PostLikeDTO dto = gson.fromJson(br, PostLikeDTO.class);
+		
+		String memId = ((MemberVO) request.getSession().getAttribute("loginUser")).getMemId();
+		dto.setMemId(memId);
+		
 		
 		// 3. MyBatis 세션 시작
 		try(SqlSession session = MybatisUtil.getSqlSession()){
